@@ -1,0 +1,37 @@
+PidFile [% apache_doc_root %]/tmp/httpd.pid
+
+Listen     [% port || 8080 %]
+ServerName [% port || 8080 %]
+
+# Add the following to your <VirtualHost>
+DocumentRoot [% apache_doc_root %]/htdocs
+
+[%- IF domain -%]
+ServerName  [% apache_domain %]
+ServerAlias [% apache_domain %]
+[%- END -%]
+
+CustomLog [% apache_doc_root %]/logs/access_log combined
+ErrorLog  [% apache_doc_root %]/logs/error_log
+
+# Enable webapp handler
+PerlRequire [% apache_doc_root %]/bin/startup.pl
+
+<Perl>
+    use Apache2::WebApp;
+    $Apache2::WebApp = Apache2::WebApp->new;
+</Perl>
+
+<Location /app>
+    SetHandler perl-script
+    PerlHandler $Apache2::WebApp->handler
+    SetEnv WEBAPP_CONF [% apache_doc_root %]/conf/webapp.conf
+</Location>
+
+# Un-comment to restrict user access
+#<Directory "/">
+#    AuthType Basic
+#    AuthName "[% project_title %]"
+#    AuthUserFile [% apache_doc_root %]/conf/htpasswd
+#    Require valid-user
+#</Directory>
