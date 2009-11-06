@@ -4,5 +4,5 @@ Revision history for Perl module Apache2::WebApp::Toolkit
     - original version; created by ExtUtils::ModuleMaker 0.51
 
 0.02 Thu Nov 05 20:27:37 2009
-0.06 
+0.08 
     - PAUSE indexer issues.  Fixed META.yml so that this should not happen again.
