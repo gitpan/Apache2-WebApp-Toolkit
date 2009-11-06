@@ -1,6 +1,6 @@
 #----------------------------------------------------------------------------+
 #
-#  Apache2::WebApp::Helper - Base class for command-line script functionality.
+#  Apache2::WebApp::Helper - Base class for command-line script functionality
 #
 #  DESCRIPTION
 #  Base class module that implements a constructor and provides helper

@@ -35,7 +35,7 @@ __END__
 
 =head1 NAME
 
-[% IF class_name %][% class_name FILTER ucfirst %][% ELSE %]Website[% END %].pm
+[% package_name %] - New project class
 
 =head1 SYNOPSIS
 
