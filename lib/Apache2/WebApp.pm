@@ -27,7 +27,7 @@ use Apache2::Upload;
 use Apache2::Const qw( :common :http );
 use Apache2::Log;
 
-our $VERSION = 0.05;
+our $VERSION = 0.06;
 
 use Apache2::WebApp::AppConfig;
 use Apache2::WebApp::Plugin;
