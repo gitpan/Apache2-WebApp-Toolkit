@@ -73,7 +73,7 @@ __END__
 
 =head1 NAME
 
-Apache2::WebApp::Plugin - Base class for Template Toolkit plugins
+Apache2::WebApp::Plugin - Base class for WebApp Toolkit plugins
 
 =head1 SYNOPSIS
 
