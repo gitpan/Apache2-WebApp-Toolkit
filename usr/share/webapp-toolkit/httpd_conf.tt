@@ -3,6 +3,15 @@ PidFile [% apache_doc_root %]/tmp/httpd.pid
 Listen     [% port || 8080 %]
 ServerName [% port || 8080 %]
 
+# Prerequisites (mod_perl 2 && Apache2::Request)
+<ifModule !perl_module>
+    LoadModule perl_module modules/mod_perl.so
+</ifModule>
+
+<ifModule !apreq_module>
+    LoadModule apreq_module modules/mod_apreq2.so
+</ifModule>
+
 # Add the following to your <VirtualHost>
 DocumentRoot [% apache_doc_root %]/htdocs
 

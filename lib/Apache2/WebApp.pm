@@ -27,7 +27,7 @@ use Apache2::Upload;
 use Apache2::Const qw( :common :http );
 use Apache2::Log;
 
-our $VERSION = 0.10;
+our $VERSION = 0.11;
 
 use Apache2::WebApp::AppConfig;
 use Apache2::WebApp::Plugin;
@@ -316,12 +316,12 @@ From source:
 
 Perl one liner using CPAN.pm:
 
-  perl -MCPAN -e 'install Apache2::WebApp::Toolkit'
+  perl -MCPAN -e 'install Apache2::WebApp'
 
 Use of CPAN.pm in interactive mode:
 
   $> perl -MCPAN -e shell
-  cpan> install Apache2::WebApp::Toolkit
+  cpan> install Apache2::WebApp
   cpan> quit
 
 Just like the manual installation of Perl modules, the user may need root access during

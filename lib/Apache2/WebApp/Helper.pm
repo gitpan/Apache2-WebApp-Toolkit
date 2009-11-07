@@ -101,7 +101,7 @@ __END__
 
 =head1 NAME
 
-Apache2::WebApp::Helper - Base class for command-line script functionality.
+Apache2::WebApp::Helper - Base class for command-line script functionality
 
 =head1 SYNOPSIS
 

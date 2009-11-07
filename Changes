@@ -7,3 +7,9 @@ Revision history for Perl module Apache2::WebApp::Toolkit
 0.10 
     - PAUSE indexer issues.  Fixed META.yml so that this should not happen again.
     - Fixed ._ issue with my PAUSE uploads.  Damn you tar on OSX!!
+
+0.11 Sat Nov 07 14:57:12 2009
+    - Added missing plugin directories.
+    - Added LoadModule directives - mod_perl/mod_apreq2
+    - Added <ifModule !> directives to prerequisites to prevent LoadModule conflicts.
+    - Minor POD updates.

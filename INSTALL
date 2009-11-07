@@ -8,14 +8,14 @@ Install this package from source:
 
 Perl one liner using CPAN.pm:
 
-  perl -MCPAN -e 'install Apache2::WebApp::Toolkit'
+  perl -MCPAN -e 'install Apache2::WebApp'
 
 
 Use of CPAN.pm in interactive mode:
 
   $ perl -MCPAN -e shell
 
-  cpan> install Apache2::WebApp::Toolkit
+  cpan> install Apache2::WebApp
   cpan> quit
 
 Just like the manual installation of Perl modules, the user may need root access
