@@ -13,3 +13,6 @@ Revision history for Perl module Apache2::WebApp::Toolkit
     - Added LoadModule directives - mod_perl/mod_apreq2
     - Added <ifModule !> directives to prerequisites to prevent LoadModule conflicts.
     - Minor POD updates.
+
+0.12 Sat Nov 07 15:35:12 2009
+    - No changes.  PAUSE indexer issues.
