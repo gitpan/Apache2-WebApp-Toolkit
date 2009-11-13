@@ -22,7 +22,7 @@ use Cwd;
 use File::Path;
 use Getopt::Long;
 
-our $VERSION = 0.01;
+our $VERSION = 0.02;
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~[  OBJECT METHODS  ]~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
@@ -39,13 +39,13 @@ sub process {
     GetOptions (
         \%opts,
         'apache_doc_root=s',
-        'class_name=s',
+        'name=s',
         'project_title=s',
         'project_author=s',
         'project_email=s',
         'project_version=s',
         'config=s',
-        'subclass',
+        'mkdir',
         'template',
         'help',
         'verbose',
@@ -59,8 +59,8 @@ sub process {
 
     if ( $opts{help}            ||
         !$opts{apache_doc_root} ||
-        !$opts{project_title}    ||
-        !$opts{class_name}      ||
+        !$opts{project_title}   ||
+        !$opts{name}            ||
         !$opts{project_author}  ||
         !$opts{project_email}   ||
         !$opts{project_version} ) {
@@ -72,9 +72,9 @@ sub process {
 
     print "Creating the class...\n" if ($verbose);
 
-    my $class = ucfirst( $opts{class_name} );
+    my $class = ucfirst( $opts{name} );
 
-    $self->error("\033[31m--class_name must be alphanumeric with no spaces\033[0m")
+    $self->error("\033[31m--name must be alphanumeric with no spaces\033[0m")
       unless ($class =~ /^\w+?$/);
 
     my $app_path = getcwd;
@@ -85,10 +85,10 @@ sub process {
 
     my $new_file = "$app_path/$class";
 
-    $self->error("\033[31m--class_name of the same name already exists\033[0m")
+    $self->error("\033[31m--name of the same name already exists\033[0m")
       if (-f "$new_file\.pm");
 
-    if ( $opts{subclass} ) {
+    if ( $opts{mkdir} ) {
         my %mk_opts = ($verbose) ? ( verbose => 1 ) : ();
 
         mkpath( $new_file, %mk_opts );
@@ -137,13 +137,13 @@ WebApp::Helper::Class - Add a new class or template to an existing project
 
       --apache_doc_root     Absolute path to your project
 
-      --class_name          Name of your class (example: MyClass)
+      --name                Name of your class (example: MyClass)
 
       --project_author      Full name of the class owner
       --project_email       E-mail address of the class owner
       --project_version     Version number of your class
 
-      --subclass            Class contains subclasses, create a directory for them
+      --mkdir               Class contains subclasses, create a directory for them
       --template            Associate a tenplate with this class
 
       --help                List available command line options (this page)
@@ -187,13 +187,13 @@ Add a new class or template to an existing project.
 
         --apache_doc_root     Absolute path to your project
 
-        --class_name          Name of your class (example: MyClass)
+        --name                Name of your class (example: MyClass)
 
         --project_author      Full name of the class owner
         --project_email       E-mail address of the class owner
         --project_version     Version number of your class
 
-        --subclass            Class contains subclasses, create a directory for them
+        --mkdir               Class contains subclasses, create a directory for them
         --template            Associate a tenplate with this class
 
         --help                List available command line options (this page)

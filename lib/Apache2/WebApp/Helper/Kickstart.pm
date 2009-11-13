@@ -20,7 +20,7 @@ use warnings;
 use base 'Apache2::WebApp::Helper';
 use Getopt::Long;
 
-our $VERSION = 0.01;
+our $VERSION = 0.02;
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~[  OBJECT METHODS  ]~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
@@ -39,6 +39,7 @@ sub process {
         'doc_root=s',
         'httpd_bin=s',
         'httpd_conf=s',
+        'stop',
         'debug',
         'help',
         'verbose',
@@ -77,7 +78,11 @@ sub process {
         unlink("$doc_root/tmp/httpd.pid")
           or $self->error("Cannot remove file: $!");
     }
-    else {
+
+    sleep 2;
+
+    unless ( $opts{stop} ) {
+
         print "Starting Apache:   \t\t\t\t\t   [ \033[32m OK \033[0m ]\n";
 
         my $dflags = ($debug) ? '-e debug -X' : '';
@@ -109,6 +114,8 @@ WebApp::Helper::Kickstart - Start-up an Apache process to test your application.
 
       --httpd_bin           Absolute path to the Apache binary (default: /usr/sbin/httpd)
       --httpd_conf          Absolute path to the Apache config (default: /etc/httpd/conf/httpd.conf)
+
+      --stop                Terminate the Apache process
 
       --debug               Run httpd in debug mode.  Only one worker process will be started.
 
@@ -152,6 +159,8 @@ Start-up an Apache process to test your application.
 
          --httpd_bin           Absolute path to the Apache binary (default: /usr/sbin/httpd)
          --httpd_conf          Absolute path to the Apache config (default: /etc/httpd/conf/httpd.conf)
+
+         --stop                Terminate the Apache process
 
          --debug               Run httpd in debug mode.  Only one worker process will be started.
 

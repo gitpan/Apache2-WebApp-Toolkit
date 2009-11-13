@@ -27,9 +27,9 @@ my $obj2 = new Apache2::WebApp::AppConfig;
 my $obj3 = new Apache2::WebApp::Plugin;
 my $obj4 = new Apache2::WebApp::Stash;
 
-isa_ok ( $obj1, 'Apache2::WebApp' );
-isa_ok ( $obj2, 'Apache2::WebApp::AppConfig' );
-isa_ok ( $obj3, 'Apache2::WebApp::Plugin' );
-isa_ok ( $obj4, 'Apache2::WebApp::Stash' );
+isa_ok( $obj1, 'Apache2::WebApp' );
+isa_ok( $obj2, 'Apache2::WebApp::AppConfig' );
+isa_ok( $obj3, 'Apache2::WebApp::Plugin' );
+isa_ok( $obj4, 'Apache2::WebApp::Stash' );
 
 done_testing();

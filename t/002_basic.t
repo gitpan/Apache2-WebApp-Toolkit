@@ -22,19 +22,19 @@ my $data3 = GET_BODY $uri3;
 ok t_cmp(
     $data1,
     'success',
-    'testing _default() method',
+    'testing _default() method'
   );
 
 ok t_cmp(
     $data2,
     'success',
-    'testing public method',
+    'testing public method'
   );
 
 ok t_cmp(
     $data3,
     'success',
-    'testing stash() method',
+    'testing stash() method'
   );
 
 done_testing();

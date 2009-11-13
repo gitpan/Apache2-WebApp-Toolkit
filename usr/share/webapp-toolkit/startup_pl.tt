@@ -14,8 +14,4 @@ use lib '[% apache_doc_root %]/app';
 # Preload classes - Modules added here will be URI accessible
 use [% project_title FILTER ucfirst %]::Example;
 
-[%- FOREACH file = classes %]
-[% file.class_name %]
-[% END -%]
-
 1;

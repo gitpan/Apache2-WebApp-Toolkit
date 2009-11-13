@@ -27,7 +27,7 @@ use Apache2::Upload;
 use Apache2::Const qw( :common :http );
 use Apache2::Log;
 
-our $VERSION = 0.12;
+our $VERSION = 0.13;
 
 use Apache2::WebApp::AppConfig;
 use Apache2::WebApp::Plugin;
@@ -299,6 +299,7 @@ Example:
 
 =head1 PREREQUISITES
 
+  Apache2::Request
   AppConfig
   Template::Toolkit
   Getopt::Long

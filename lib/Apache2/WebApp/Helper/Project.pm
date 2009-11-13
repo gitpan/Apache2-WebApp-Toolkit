@@ -22,7 +22,7 @@ use Apache2::ServerRec;
 use File::Path;
 use Getopt::Long;
 
-our $VERSION = 0.01;
+our $VERSION = 0.02;
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~[  OBJECT METHODS  ]~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
@@ -66,6 +66,8 @@ sub process {
 
     print "Building the project...\n" if ($verbose);
 
+    $opts{apache_doc_root} =~ s/\/\z//g;
+
     my $doc_root = $opts{apache_doc_root};
 
     $self->error("\033[31m--project_title of the same name already exists\033[0m")
@@ -77,7 +79,7 @@ sub process {
 
     my $project = $opts{project_title};
 
-    $project =~ s/(\w+)/\u\L$1/g;
+    $project =~ s/(\w+)/ucfirst($1)/eg;
 
     $self->error("\033[31m--project_title must be alphanumeric with no spaces\033[0m")
       unless ($project =~ /^\w+?$/);

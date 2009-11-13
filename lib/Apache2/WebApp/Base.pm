@@ -20,7 +20,7 @@ use strict;
 use warnings;
 use Apache2::Log;
 use Params::Validate qw( :all );
-our $VERSION = 0.01;
+our $VERSION = 0.02;
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~[  OBJECT METHODS  ]~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
@@ -59,10 +59,16 @@ sub error {
     my ( $self, $mesg )
       = validate_pos( @_,
           { type => OBJECT },
-          { type => SCALAR }
+          { type => SCALAR, optional => 1 }
           );
 
-    if ( $self->{DEBUG} ) { confess $mesg } else { die $mesg }
+    my $class = ref $self || $self;
+
+    $mesg ||= "Failed to initialize object";
+
+    my $error = "[$class] $mesg";
+
+    if ( $self->{DEBUG} ) { confess $error } else { die $error }
 }
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~[  PRIVATE METHODS  ]~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#

@@ -16,3 +16,20 @@ Revision history for Perl module Apache2::WebApp::Toolkit
 
 0.12 Sat Nov 07 15:35:12 2009
     - No changes.  PAUSE indexer issues.
+
+0.13 Fri Nov 13 02:12:26 2009
+
+  Apache2::WebApp::Base
+    - Fixed several bugs in error() handling.
+    - Added missing parameter (optional => 1)
+    - Updated the message output to include the caller ClassName
+
+  Apache2::WebApp::Helper::Class
+    - Renamed 'class_name' and 'subclass' CLI script options.
+
+  Apache2::WebApp::Helper::Kickstart
+    - Updated the Apache start/stop process to include restart capabilites.
+
+  Apache2::WebApp::Helper::Project
+    - Added regex to strip trailing / in 'apache_doc_root'
+    - Fixed 'project_title' case formatting issue.
