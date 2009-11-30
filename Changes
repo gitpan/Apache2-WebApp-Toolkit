@@ -33,3 +33,14 @@ Revision history for Perl module Apache2::WebApp::Toolkit
   Apache2::WebApp::Helper::Project
     - Added regex to strip trailing / in 'apache_doc_root'
     - Fixed 'project_title' case formatting issue.
+
+0.14 Sun Nov 29 21:46:11 2009
+
+  Apache2::WebApp
+    - Refactored the dispatch() code.  Fixed translation method to map URI requests to camelled class names.
+
+  Apache2::WebApp::Helper::Class
+    - Added Regex to exclude the project_title when writing template files.
+
+  Apache2::WebApp::Helper::Project
+    - Fixed project_title cameling issue.

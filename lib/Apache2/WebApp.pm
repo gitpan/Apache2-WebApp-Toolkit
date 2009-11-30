@@ -27,7 +27,7 @@ use Apache2::Upload;
 use Apache2::Const qw( :common :http );
 use Apache2::Log;
 
-our $VERSION = 0.13;
+our $VERSION = 0.14;
 
 use Apache2::WebApp::AppConfig;
 use Apache2::WebApp::Plugin;
@@ -136,22 +136,25 @@ sub dispatch {
         return HTTP_BAD_REQUEST;
     }
 
-    my $module = $uri;
+    $uri =~ s/\/+$//g;
+
     my $method;
 
-    unless ( $self->module_exists($module) ) {
+    unless ( $self->module_exists($uri) ) {
         $method = $uri;
         $method =~ s/(?:.*?)\/(\w+?)(?:\/|)\z/$1/g;
-        $module =~ s/(.*?)\/(?:\w+?)(?:\/|)\z/$1/g;
+        $uri    =~ s/(.*?)\/(?:\w+?)(?:\/|)\z/$1/g;
     }
 
-    unless ( $self->module_exists($module) ) {
-        $self->error( $c, "Failed to map URI ($uri) to module ($module)" );
+    my $module = $self->module_exists($uri);
+
+    unless ($module) {
+        $self->error( $c, "Failed to map URI ($uri) to class ($module)" );
         return DECLINED;
     }
 
     $module =~ s/\//::/g;
-    $module =~ s/(\w+)/\u\L$1/g;
+    $module =~ s/\.pm//g;
 
     unshift @ISA, $module;
 
@@ -187,13 +190,13 @@ sub dispatch {
 #----------------------------------------------------------------------------+
 # module_exists($file)
 #
-# Search %INC for the selected module, return true if exists.
+# Search %INC for the selected module, return filename if exists.
 
 sub module_exists {
     my ( $self, $file ) = @_;
     return unless $file;
     foreach (sort keys %INC) {
-        return 1 if ($_ =~ /$file\.pm\z/i);
+        return $_ if ($_ =~ /$file\.pm\z/i);
     }
     return;
 }

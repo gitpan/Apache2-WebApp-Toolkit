@@ -20,7 +20,7 @@ use warnings;
 use base 'Apache2::WebApp::Base';
 use Params::Validate qw( :all );
 
-our $VERSION = 0.01;
+our $VERSION = 0.02;
 our $AUTOLOAD;
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~[  OBJECT METHODS  ]~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
@@ -91,25 +91,34 @@ A simple mechanism for loading WebApp Toolkit plugins.
 
 There are many plugins that provide additional functionality to your web application.
 
-L<Apache2::WebApp::Plugin::CGI> - Common methods for dealing with user input.
+L<Apache2::WebApp::Plugin::CGI> - Common methods for dealing with HTTP requests.
 
-L<Apache2::WebApp::Plugin::Cookie> - Common methods for manipulating web browser cookies.
+L<Apache2::WebApp::Plugin::Cookie> - Common methods for creating and manipulating web browser cookies.
 
-L<Apache2::WebApp::Plugin::DBI> - Database interface wrapper.
+L<Apache2::WebApp::Plugin::DateTime> - Common methods for dealing with Date/Time.
 
-L<Apache2::WebApp::Plugin::DateTime> - Date/Time methods.
+L<Apache2::WebApp::Plugin::DBI> - Database interface wrapper for MySQL, PostGre, and Oracle.
 
-L<Apache2::WebApp::Plugin::Filters> - Data/Text filtering methods.
+L<Apache2::WebApp::Plugin::File> - Common methods for processing and outputting files.
+
+L<Apache2::WebApp::Plugin::Filters> - Common methods for filtering HTTP request parameters.
 
 L<Apache2::WebApp::Plugin::JSON> - JSON module wrapper.
 
-L<Apache2::WebApp::Plugin::Mail> - E-mail parsing and message sending methods.
+L<Apache2::WebApp::Plugin::Mail> - Methods for sending template based multi-format e-mail.
 
 L<Apache2::WebApp::Plugin::Memcached> - Cache::Memcached module wrapper.
 
-L<Apache2::WebApp::Plugin::Session> - Session handling methods.
+L<Apache2::WebApp::Plugin::Session> - Provides session handling methods.
 
-L<Apache2::WebApp::Plugin::Validate> - Form field validation methods.
+L<Apache2::WebApp::Plugin::Session::File> - Store persistent data on the filesystem.
+
+L<Apache2::WebApp::Plugin::Session::Memcached> - Store persistent data using memcached (memory cache daemon).
+
+L<Apache2::WebApp::Plugin::Session::MySQL> - Store persistent data in a MySQL database.
+
+L<Apache2::WebApp::Plugin::Validate> - Common methods used for validating user input.
+
 
 =head1 INSTALLATION
 
@@ -123,7 +132,7 @@ Use of CPAN.pm in interactive mode:
   cpan> install Apache2::WebApp::Plugin::Name
   cpan> quit
 
-Just like the manual installation of perl modules, the user may need root access during 
+Just like the manual installation of Perl modules, the user may need root access during 
 this process to insure write permission is allowed within the intstallation directory.
 
 =head1 SEE ALSO

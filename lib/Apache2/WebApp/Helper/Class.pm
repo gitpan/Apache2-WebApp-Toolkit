@@ -101,8 +101,9 @@ sub process {
     $package =~ s/\//::/g;
     $package =~ s/\b(\w)/uc($1)/eg;
 
-    my $template = lc($package);
-    $template =~ s/::/_/g;
+    my $template = $new_file;
+    $template =~ s/^.*\/app\/\w+?\/(.*)/$1/gs;
+    $template =~ s/\//_/g;
 
     $self->set_vars({
         %opts,

@@ -51,6 +51,6 @@ None
 
 =head1 AUTHOR
 
-[% project_author %], E<lt>[% project_email FILTER lower %]<gt>
+[% project_author %], E<lt>[% project_email FILTER lower %]E<gt>
 
 =cut

@@ -18,7 +18,14 @@
 [%- IF package_name %]
 <h2>It works!</h2>
 
-<p>This page is used to test your project after it has been created. If you can read this page it means that the Apache2::WebApp::Toolkit is working properly.</p>
+<p>
+	This page is used to test your project after it has been created.
+
+		<br />
+		<br />
+
+	If you can read this page it means that the Apache2::WebApp::Toolkit is working properly.
+</p>
 [% END -%]
 </body>
 </html>

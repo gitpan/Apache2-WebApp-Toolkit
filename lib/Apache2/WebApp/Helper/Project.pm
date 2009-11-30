@@ -79,7 +79,7 @@ sub process {
 
     my $project = $opts{project_title};
 
-    $project =~ s/(\w+)/ucfirst($1)/eg;
+    $project =~ s/(\w+)/$1/g;
 
     $self->error("\033[31m--project_title must be alphanumeric with no spaces\033[0m")
       unless ($project =~ /^\w+?$/);
@@ -138,7 +138,7 @@ sub process {
     $self->write_file( 'template.tt',    "$doc_root/templates/example.tt"    );
     $self->write_file( 'error.tt',       "$doc_root/templates/error.tt"      );
 
-    print "Project created successfully\n";
+    print "Project '$project' created successfully\n";
     exit;
 }
 
