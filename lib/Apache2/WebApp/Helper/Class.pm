@@ -20,9 +20,9 @@ use warnings;
 use base 'Apache2::WebApp::Helper';
 use Cwd;
 use File::Path;
-use Getopt::Long;
+use Getopt::Long qw( :config pass_through );
 
-our $VERSION = 0.02;
+our $VERSION = 0.03;
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~[  OBJECT METHODS  ]~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 

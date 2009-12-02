@@ -24,7 +24,7 @@ use Params::Validate qw( :all );
 use Apache2::WebApp::AppConfig;
 use Apache2::WebApp::Template;
 
-our $VERSION = 0.01;
+our $VERSION = 0.02;
 our $AUTOLOAD;
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~[  OBJECT METHODS  ]~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
@@ -83,6 +83,22 @@ sub write_file {
 }
 
 #----------------------------------------------------------------------------+
+# error($mesg)
+#
+# Print errors/exceptions to STDOUT and exit.
+
+sub error {
+    my ( $self, $mesg )
+      = validate_pos( @_,
+          { type => OBJECT },
+          { type => SCALAR }
+          );
+
+    print "$mesg\n";
+    exit;
+}
+
+#----------------------------------------------------------------------------+
 # AUTOLOAD()
 #
 # Provides pseudo-methods for read-only access to various internal methods.
@@ -127,6 +143,12 @@ Set the template object attributes.
 Write the template output to a file.
 
   $obj->write_file( $file, $output );
+
+=head2 error
+
+Print errors/exceptions to STDOUT and exit.
+
+  $self->error($mesg);
 
 =head1 EXAMPLES
 

@@ -1,7 +1,6 @@
 PidFile [% apache_doc_root %]/tmp/httpd.pid
 
-Listen     [% port || 8080 %]
-ServerName [% port || 8080 %]
+Listen *:[% port || 8080 %]
 
 # Prerequisites (mod_perl 2 && Apache2::Request)
 <ifModule !perl_module>
@@ -12,13 +11,19 @@ ServerName [% port || 8080 %]
     LoadModule apreq_module modules/mod_apreq2.so
 </ifModule>
 
+# If mod_rewrite is supported
+[% UNLESS rewrite_uri %]#[% END %]<ifModule !rewrite_module>
+[% UNLESS rewrite_uri %]#[% END %]    LoadModule rewrite_module modules/mod_rewrite.so
+[% UNLESS rewrite_uri %]#[% END %]</ifModule>
+
+# Shorten the URI by removing the project title
+[% UNLESS rewrite_uri %]#[% END %]RewriteEngine on
+[% UNLESS rewrite_uri %]#[% END %]RewriteRule   ^/app/[% project_title FILTER lower %](.*)   /app$1   [R]
+
 # Add the following to your <VirtualHost>
 DocumentRoot [% apache_doc_root %]/htdocs
 
-[%- IF domain -%]
-ServerName  [% apache_domain %]
-ServerAlias [% apache_domain %]
-[%- END -%]
+[% UNLESS apache_domain %]#[% END %]ServerName  [% apache_domain %]
 
 CustomLog [% apache_doc_root %]/logs/access_log combined
 ErrorLog  [% apache_doc_root %]/logs/error_log

@@ -20,9 +20,9 @@ use warnings;
 use base 'Apache2::WebApp::Helper';
 use Apache2::ServerRec;
 use File::Path;
-use Getopt::Long;
+use Getopt::Long qw( :config pass_through );
 
-our $VERSION = 0.02;
+our $VERSION = 0.03;
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~[  OBJECT METHODS  ]~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
@@ -35,7 +35,7 @@ sub process {
     my $self = shift;
 
     my %opts;
-
+   
     GetOptions (
         \%opts,
         'apache_doc_root=s',
@@ -45,6 +45,7 @@ sub process {
         'project_email=s',
         'project_version=s',
         'config=s',
+        'rewrite_uri',
         'help',
         'verbose',
       );
@@ -110,13 +111,13 @@ sub process {
     chmod 0777, "$doc_root/tmp/cache/templates";
     chmod 0777, "$doc_root/tmp/uploads";
 
-    open (FILE1, ">$doc_root/logs/access_log") or $self->error("Cannot open file: $!");
-    open (FILE2, ">$doc_root/logs/error_log" ) or $self->error("Cannot open file: $!");
-    close(FILE1);
-    close(FILE2);
+    open (FILE1, ">$doc_root/logs/access_log"    ) or $self->error("Cannot open file: $!");  close(FILE1);
+    open (FILE2, ">$doc_root/logs/error_log"     ) or $self->error("Cannot open file: $!");  close(FILE2);
+    open (FILE3, ">$doc_root/htdocs/favicon.ico" ) or $self->error("Cannot open file: $!");  close(FILE3);
 
-    print "created $doc_root/logs/access_log\n" if ($verbose);
-    print "created $doc_root/logs/error_log\n"  if ($verbose);
+    print "created $doc_root/logs/access_log\n"  if ($verbose);
+    print "created $doc_root/logs/error_log\n"   if ($verbose);
+    print "created $doc_root/htdocs/favicon.ico" if ($verbose);
 
     my $uri = "app/" . lc($project) . '/example';
 
@@ -167,6 +168,8 @@ WebApp::Helper::Project - Creates the necessary project files and directories
       --project_email       E-mail address of the project owner
       --project_version     Version number of your project
 
+      --rewrite_uri         Remove the project name from the URI (requires mod_rewrite)
+
       --help                List available command line options (this page)
       --verbose             Print messages to STDOUT
 
@@ -213,6 +216,8 @@ Creates the necessary project files and directories.
         --project_author      Full name of the project owner
         --project_email       E-mail address of the project owner
         --project_version     Version number of your project
+
+        --rewrite_uri         Remove the project name from the URI (requires mod_rewrite)
 
         --help                List available command line options (this page)
         --verbose             Print messages to STDOUT
