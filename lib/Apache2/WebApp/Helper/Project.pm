@@ -22,7 +22,7 @@ use Apache2::ServerRec;
 use File::Path;
 use Getopt::Long qw( :config pass_through );
 
-our $VERSION = 0.03;
+our $VERSION = 0.04;
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~[  OBJECT METHODS  ]~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
@@ -115,9 +115,9 @@ sub process {
     open (FILE2, ">$doc_root/logs/error_log"     ) or $self->error("Cannot open file: $!");  close(FILE2);
     open (FILE3, ">$doc_root/htdocs/favicon.ico" ) or $self->error("Cannot open file: $!");  close(FILE3);
 
-    print "created $doc_root/logs/access_log\n"  if ($verbose);
-    print "created $doc_root/logs/error_log\n"   if ($verbose);
-    print "created $doc_root/htdocs/favicon.ico" if ($verbose);
+    print "created $doc_root/logs/access_log\n"    if ($verbose);
+    print "created $doc_root/logs/error_log\n"     if ($verbose);
+    print "created $doc_root/htdocs/favicon.ico\n" if ($verbose);
 
     my $uri = "app/" . lc($project) . '/example';
 

@@ -27,7 +27,7 @@ use Apache2::Upload;
 use Apache2::Const qw( :common :http );
 use Apache2::Log;
 
-our $VERSION = 0.14;
+our $VERSION = 0.16;
 
 use Apache2::WebApp::AppConfig;
 use Apache2::WebApp::Plugin;
@@ -42,13 +42,13 @@ use Apache2::WebApp::Template;
 # mod_perl handler - Instanciate Apache2::WebApp::Toolkit objects.
 
 sub handler : method {
-    my ( $class, $req ) = @_;
+    my ( $class, $r ) = @_;
 
     my $config = Apache2::WebApp::AppConfig->new;
 
     $class->{CONFIG} = $config->parse( $ENV{'WEBAPP_CONF'} );
 
-    $class->{REQUEST} = Apache2::Request->new( $req,
+    $class->{REQUEST} = Apache2::Request->new( $r,
         DISABLE_UPLOADS => $class->{CONFIG}->{apache_disable_uploads},
         POST_MAX        => $class->{CONFIG}->{apache_post_max},
         TEMP_DIR        => $class->{CONFIG}->{apache_temp_dir}
@@ -149,7 +149,7 @@ sub dispatch {
     my $module = $self->module_exists($uri);
 
     unless ($module) {
-        $self->error( $c, "Failed to map URI ($uri) to class ($module)" );
+        $self->error( $c, "Failed to map URI ($uri) request" );
         return DECLINED;
     }
 
