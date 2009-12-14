@@ -22,7 +22,7 @@ use Cwd;
 use File::Path;
 use Getopt::Long qw( :config pass_through );
 
-our $VERSION = 0.03;
+our $VERSION = 0.04;
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~[  OBJECT METHODS  ]~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
@@ -60,10 +60,7 @@ sub process {
     if ( $opts{help}            ||
         !$opts{apache_doc_root} ||
         !$opts{project_title}   ||
-        !$opts{name}            ||
-        !$opts{project_author}  ||
-        !$opts{project_email}   ||
-        !$opts{project_version} ) {
+        !$opts{name}            ) {
 
         $self->help;
     }

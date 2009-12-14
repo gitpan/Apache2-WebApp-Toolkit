@@ -3,7 +3,7 @@ package [% project_title FILTER ucfirst %]::Base;
 use strict;
 #use warnings;     # debug
 
-our $VERSION = [% project_version %];
+our $VERSION = [% project_version || '0.01' %];
 
 #----------------------------------------------------------------------------+
 # _global(\%controller)
@@ -11,10 +11,15 @@ our $VERSION = [% project_version %];
 sub _global {
     my ( $self, $c ) = @_;
 
-[%- USE dir = Directory('/usr/share/webapp-toolkit/plugin_base') -%]
+[%- USE dir1 = Directory('/usr/share/webapp-toolkit/plugin_base') -%]
+[%- USE dir2 = Directory('/usr/share/webapp-toolkit/extra_base')  -%]
 
-[%- FOREACH file = dir.files %]
+[%- FOREACH file = dir1.files %]
 [%  PROCESS "plugin_base/$file.name" %]
+[%- END -%]
+
+[%- FOREACH file = dir2.files %]
+[%  PROCESS "extra_base/$file.name" %]
 [%- END -%]
 
     return $c;
@@ -64,6 +69,6 @@ Common methods to be inherited by all classes.
 
 =head1 AUTHOR
 
-[% project_author %], E<lt>[% project_email FILTER lower %]E<gt>
+[% project_author 'Your Name Here' %], E<lt>[% project_email || 'alias@domain.com' FILTER lower %]E<gt>
 
 =cut

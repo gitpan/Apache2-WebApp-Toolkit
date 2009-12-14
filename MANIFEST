@@ -6,6 +6,7 @@ Changes
 Makefile.PL
 META.yml
 bin/webapp-class
+bin/webapp-extra
 bin/webapp-kickstart
 bin/webapp-project
 example/webapp.conf
@@ -13,6 +14,7 @@ lib/Apache2/WebApp.pm
 lib/Apache2/WebApp/Base.pm
 lib/Apache2/WebApp/AppConfig.pm
 lib/Apache2/WebApp/Helper/Class.pm
+lib/Apache2/WebApp/Helper/Extra.pm
 lib/Apache2/WebApp/Helper/Kickstart.pm
 lib/Apache2/WebApp/Helper/Project.pm
 lib/Apache2/WebApp/Plugin.pm

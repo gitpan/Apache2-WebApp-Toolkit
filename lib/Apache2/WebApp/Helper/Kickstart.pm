@@ -18,7 +18,7 @@ package Apache2::WebApp::Helper::Kickstart;
 use strict;
 use warnings;
 use base 'Apache2::WebApp::Helper';
-use Getopt::Long;
+use Getopt::Long qw( :config pass_through );
 
 our $VERSION = 0.02;
 

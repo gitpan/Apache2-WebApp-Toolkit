@@ -80,10 +80,10 @@ options can be easily configured in your project I<webapp.conf>
 =head3 CONFIG
 
   [template]
-  cache_size   = 100                               # total files to store in cache
-  compile_dir  = /path/to/project/tmp/template     # path to template cache
-  include_path = /path/to/project/template         # path to template directory
-  stat_ttl     = 60                                # template to HTML build time (in seconds)
+  cache_size   = 100                                # total files to store in cache
+  compile_dir  = /path/to/project/tmp/templates     # path to template cache
+  include_path = /path/to/project/templates         # path to template directory
+  stat_ttl     = 60                                 # template to HTML build time (in seconds)
 
 =head3 METHOD
 

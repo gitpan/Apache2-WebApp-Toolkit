@@ -3,7 +3,7 @@ package [% package_name %];
 use strict;
 #use warnings;     # debug
 
-our $VERSION = [% project_version %];
+our $VERSION = [% project_version || '0.01' %];
 
 use base qw(
   [% project_title FILTER ucfirst %]::Base
@@ -51,6 +51,6 @@ None
 
 =head1 AUTHOR
 
-[% project_author %], E<lt>[% project_email FILTER lower %]E<gt>
+[% project_author 'Your Name Here' %], E<lt>[% project_email || 'alias@domain.com' FILTER lower %]E<gt>
 
 =cut

@@ -2,11 +2,17 @@
 
 $ENV{MOD_PERL} or die "Not running under mod_perl";
 
-[%- USE dir = Directory('/usr/share/webapp-toolkit/plugin_startup') -%]
+[%- USE dir1 = Directory('/usr/share/webapp-toolkit/plugin_startup') -%]
+[%- USE dir2 = Directory('/usr/share/webapp-toolkit/extra_startup')  -%]
 
-[%- FOREACH file = dir.files %]
+[%- FOREACH file = dir1.files %]
 [% IF loop.count == 1 %]# Load before all other modules[% END %]
 [% PROCESS "plugin_startup/$file.name" %]
+[%- END -%]
+
+[%- FOREACH file = dir2.files %]
+[% IF loop.count == 1 %]# Load before all other modules[% END %]
+[% PROCESS "extra_startup/$file.name" %]
 [%- END -%]
 
 use lib '[% apache_doc_root %]/app';

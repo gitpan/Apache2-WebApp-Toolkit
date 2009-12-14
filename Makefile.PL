@@ -28,6 +28,7 @@ WriteMakefile(
     },
     EXE_FILES => [ qw(
                        bin/webapp-class
+                       bin/webapp-extra
                        bin/webapp-kickstart
                        bin/webapp-project
                      ) ],

@@ -22,7 +22,7 @@ use Apache2::ServerRec;
 use File::Path;
 use Getopt::Long qw( :config pass_through );
 
-our $VERSION = 0.04;
+our $VERSION = 0.05;
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~[  OBJECT METHODS  ]~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 

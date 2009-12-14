@@ -188,28 +188,28 @@ GETTING STARTED
 
     G) Application configuration. This file contains your project settings.
     Due to security reasons, this file should always remain outside the
-    *html/* directory path.
+    *htdocs/* directory path.
 
     Example:
 
       [project]
-      title              = Project                         # must not contain spaces or special characters
+      title              = Project                           # must not contain spaces or special characters
       author             = Your Name Here
       email              = email@domain.com
       version            = 0.01
 
       [apache]
-      doc_root           = /var/www/project                # path to project directory
-      domain             = www.domain.com                  # valid domain name
-      disable_uploads    = 0                               # allow file uploads
-      post_max           = 5242880                         # post max in bytes (example 5MB)
+      doc_root           = /var/www/project                  # path to project directory
+      domain             = www.domain.com                    # valid domain name
+      disable_uploads    = 0                                 # allow file uploads
+      post_max           = 5242880                           # post max in bytes (example 5MB)
       temp_dir           = /var/www/project/tmp/uploads
 
       [template]
-      cache_size         = 100                             # total files to store in cache
-      compile_dir        = /var/www/project/tmp/template   # path to template cache
-      include_path       = /var/www/project/template       # path to template directory
-      stat_ttl           = 60                              # template to HTML build time (in seconds)
+      cache_size         = 100                               # total files to store in cache
+      compile_dir        = /var/www/project/tmp/templates    # path to template cache
+      include_path       = /var/www/project/templates        # path to template directory
+      stat_ttl           = 60                                # template to HTML build time (in seconds)
 
     H) Website sources. This includes HTML, CSS, Javascript, and images.
     When setting up FTP access - restrict access to this directory only.
@@ -220,7 +220,7 @@ GETTING STARTED
 
     K) Apache log directory that contains both access and error logs. Due to
     security reasons, this directory should always remain outside the
-    *html/* directory path.
+    *htdocs/* directory path.
 
     L) Temporary shared space for file processing.
 

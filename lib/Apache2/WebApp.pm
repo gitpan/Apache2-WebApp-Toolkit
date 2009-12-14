@@ -17,6 +17,7 @@ package Apache2::WebApp;
 
 use strict;
 use warnings;
+no  warnings qw( uninitialized );
 use base qw( Apache2::WebApp::Base );
 use vars qw( @ISA );
 use Apache2::Request;
@@ -27,7 +28,7 @@ use Apache2::Upload;
 use Apache2::Const qw( :common :http );
 use Apache2::Log;
 
-our $VERSION = 0.16;
+our $VERSION = 0.17;
 
 use Apache2::WebApp::AppConfig;
 use Apache2::WebApp::Plugin;
@@ -131,8 +132,8 @@ sub dispatch {
 
     my $uri = substr( $c->request->uri, length( $c->request->location ) + 1 );
 
-    unless ($uri =~ /\A (\w+\/)*\w+ /xs ) {
-        $self->error( $c, "URI ($uri) malformed" );
+    unless ( $uri =~ /\A (\w+\/)*\w+ /xs ) {
+        $self->error( $c, "Malformed URI request" );
         return HTTP_BAD_REQUEST;
     }
 
@@ -140,13 +141,13 @@ sub dispatch {
 
     my $method;
 
-    unless ( $self->module_exists($uri) ) {
+    unless ( $self->module_exists( $c, $uri ) ) {
         $method = $uri;
         $method =~ s/(?:.*?)\/(\w+?)(?:\/|)\z/$1/g;
         $uri    =~ s/(.*?)\/(?:\w+?)(?:\/|)\z/$1/g;
     }
 
-    my $module = $self->module_exists($uri);
+    my $module = $self->module_exists( $c, $uri );
 
     unless ($module) {
         $self->error( $c, "Failed to map URI ($uri) request" );
@@ -193,10 +194,13 @@ sub dispatch {
 # Search %INC for the selected module, return filename if exists.
 
 sub module_exists {
-    my ( $self, $file ) = @_;
+    my ( $self, $c, $file ) = @_;
     return unless $file;
+
+    my $project = $c->config->{project_title};
+
     foreach (sort keys %INC) {
-        return $_ if ($_ =~ /$file\.pm\z/i);
+        return $_ if (/\A $project\/$file\.pm \z/xi);
     }
     return;
 }
@@ -411,28 +415,28 @@ E) Password file used for restricting access to a specified path (see C<httpd.co
 F) Apache server I<Virtual Host> configuration.
 
 G) Application configuration.  This file contains your project settings.  Due to
-security reasons, this file should always remain outside the I<html/> directory path.
+security reasons, this file should always remain outside the I<htdocs/> directory path.
 
 Example:
 
   [project]
-  title              = Project                         # must not contain spaces or special characters
+  title              = Project                           # must not contain spaces or special characters
   author             = Your Name Here
   email              = email@domain.com
   version            = 0.01
 
   [apache]
-  doc_root           = /var/www/project                # path to project directory
-  domain             = www.domain.com                  # valid domain name
-  disable_uploads    = 0                               # allow file uploads
-  post_max           = 5242880                         # post max in bytes (example 5MB)
+  doc_root           = /var/www/project                  # path to project directory
+  domain             = www.domain.com                    # valid domain name
+  disable_uploads    = 0                                 # allow file uploads
+  post_max           = 5242880                           # post max in bytes (example 5MB)
   temp_dir           = /var/www/project/tmp/uploads
 
   [template]
-  cache_size         = 100                             # total files to store in cache
-  compile_dir        = /var/www/project/tmp/template   # path to template cache
-  include_path       = /var/www/project/template       # path to template directory
-  stat_ttl           = 60                              # template to HTML build time (in seconds)
+  cache_size         = 100                               # total files to store in cache
+  compile_dir        = /var/www/project/tmp/templates    # path to template cache
+  include_path       = /var/www/project/templates        # path to template directory
+  stat_ttl           = 60                                # template to HTML build time (in seconds)
 
 H) Website sources.  This includes HTML, CSS, Javascript, and images.  When setting
 up FTP access - restrict access to this directory only.
@@ -442,7 +446,7 @@ I) Basic template.
 J) Application error templates.
 
 K) Apache log directory that contains both access and error logs.  Due to security
-reasons, this directory should always remain outside the I<html/> directory path.
+reasons, this directory should always remain outside the I<htdocs/> directory path.
 
 L) Temporary shared space for file processing.
 
