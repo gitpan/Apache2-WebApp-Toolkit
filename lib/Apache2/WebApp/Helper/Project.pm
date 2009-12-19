@@ -21,7 +21,7 @@ use base 'Apache2::WebApp::Helper';
 use File::Path;
 use Getopt::Long qw( :config pass_through );
 
-our $VERSION = 0.06;
+our $VERSION = 0.07;
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~[  OBJECT METHODS  ]~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
@@ -118,13 +118,11 @@ sub process {
     print "created $doc_root/logs/error_log\n"     if ($verbose);
     print "created $doc_root/htdocs/favicon.ico\n" if ($verbose);
 
-    my $uri = "app/" . lc($project) . '/example';
-
     $self->set_vars({
         %opts,
         package_name  => "$project\::Example",
         template_name => 'example',
-        example_uri   => $uri,
+        example_uri   => 'app/example',
       });
 
     $self->write_file( 'class_pm.tt',    "$doc_root/app/$project/Example.pm" );

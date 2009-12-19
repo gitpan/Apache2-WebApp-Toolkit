@@ -16,9 +16,9 @@ Listen *:[% port || 8080 %]
 [% UNLESS rewrite_uri %]#[% END %]    LoadModule rewrite_module modules/mod_rewrite.so
 [% UNLESS rewrite_uri %]#[% END %]</ifModule>
 
-# Shorten the URI by removing the project title
+# Shorten the URI using mod_rewrite
 [% UNLESS rewrite_uri %]#[% END %]RewriteEngine on
-[% UNLESS rewrite_uri %]#[% END %]RewriteRule   ^/app/[% project_title FILTER lower %](.*)   /app$1   [R]
+[% UNLESS rewrite_uri %]#[% END %]RewriteRule   ^/app/example(.*)   /app$1   [R]
 
 # Add the following to your <VirtualHost>
 DocumentRoot [% apache_doc_root %]/htdocs
