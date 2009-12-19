@@ -18,11 +18,10 @@ package Apache2::WebApp::Helper::Project;
 use strict;
 use warnings;
 use base 'Apache2::WebApp::Helper';
-use Apache2::ServerRec;
 use File::Path;
 use Getopt::Long qw( :config pass_through );
 
-our $VERSION = 0.05;
+our $VERSION = 0.06;
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~[  OBJECT METHODS  ]~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
