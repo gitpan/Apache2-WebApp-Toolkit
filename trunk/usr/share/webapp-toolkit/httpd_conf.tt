@@ -43,9 +43,9 @@ PerlRequire [% apache_doc_root %]/bin/startup.pl
 </Location>
 
 # Un-comment to restrict user access
-#<Directory "/">
+#<Location /app>
 #    AuthType Basic
 #    AuthName "[% project_title %]"
 #    AuthUserFile [% apache_doc_root %]/conf/htpasswd
 #    Require valid-user
-#</Directory>
+#</Location>

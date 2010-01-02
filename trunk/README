@@ -84,6 +84,7 @@ DESCRIPTION
       1;
 
 PREREQUISITES
+      Apache2::Request
       AppConfig
       Template::Toolkit
       Getopt::Long
@@ -125,7 +126,7 @@ GETTING STARTED
       $ source /path/to/project/.projrc
 
    Create a new class
-      $ webapp-class --config /path/to/conf/webapp.conf
+      $ webapp-class --config /path/to/conf/webapp.conf --name ClassName
 
    Start your application
       $ webapp-kickstart
@@ -183,6 +184,16 @@ GETTING STARTED
 
     E) Password file used for restricting access to a specified path (see
     "httpd.conf").
+
+    The login information below is currently set-up by default.
+
+      User Name       admin
+      Password        password
+
+    You can change the login password using the "htpasswd" command-line
+    script.
+
+      $ htpasswd /var/www/project/conf/htpasswd admin
 
     F) Apache server *Virtual Host* configuration.
 

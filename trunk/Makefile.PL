@@ -20,11 +20,12 @@ WriteMakefile(
     VERSION_FROM => 'lib/Apache2/WebApp.pm', # finds \$VERSION
     AUTHOR       => 'Marc S. Brooks (mbrooks@cpan.org)',
     PREREQ_PM => {
-        'Apache::Test'     => 0,
-        'Apache2::Request' => 0,
-        'AppConfig'        => 0,
-        'Template'         => 0,
-        'Params::Validate' => 0,
+        'Apache::Test'          => 0,
+        'Apache2::Request'      => 0,
+        'AppConfig'             => 0,
+        'Template'              => 0,
+        'File::Copy::Recursive' => 0,
+        'Params::Validate'      => 0,
     },
     EXE_FILES => [ qw(
                        bin/webapp-class

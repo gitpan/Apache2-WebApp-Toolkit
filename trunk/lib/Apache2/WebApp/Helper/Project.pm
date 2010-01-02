@@ -21,7 +21,7 @@ use base 'Apache2::WebApp::Helper';
 use File::Path;
 use Getopt::Long qw( :config pass_through );
 
-our $VERSION = 0.07;
+our $VERSION = 0.08;
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~[  OBJECT METHODS  ]~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
@@ -59,51 +59,37 @@ sub process {
         !$opts{apache_doc_root} ||
         !$opts{project_title}   ) {
 
+        print "\033[33mMissing or invalid options\033[0m\n\n";
+
         $self->help;
     }
 
-    my $verbose = $opts{verbose};
+    my $project  = $opts{project_title};
+    my $doc_root = $opts{apache_doc_root};
+    my $verbose  = $opts{verbose};
 
     print "Building the project...\n" if ($verbose);
-
-    $opts{apache_doc_root} =~ s/\/\z//g;
-
-    my $doc_root = $opts{apache_doc_root};
 
     $self->error("\033[31m--project_title of the same name already exists\033[0m")
       if (-d $doc_root);
 
-    my %mk_opts = ($verbose) ? ( verbose => 1 ) : ();
-
-    mkpath( $doc_root, %mk_opts );
-
-    my $project = $opts{project_title};
-
-    $project =~ s/(\w+)/$1/g;
-
     $self->error("\033[31m--project_title must be alphanumeric with no spaces\033[0m")
       unless ($project =~ /^\w+?$/);
 
-    mkpath( "$doc_root/app",                  %mk_opts );
-    mkpath( "$doc_root/app/$project",         %mk_opts );
-    mkpath( "$doc_root/bin",                  %mk_opts );
-    mkpath( "$doc_root/conf",                 %mk_opts );
-    mkpath( "$doc_root/htdocs",               %mk_opts );
-    mkpath( "$doc_root/logs",                 %mk_opts );
-    mkpath( "$doc_root/templates",            %mk_opts );
-    mkpath( "$doc_root/tmp",                  %mk_opts );
-    mkpath( "$doc_root/tmp/cache",            %mk_opts );
-    mkpath( "$doc_root/tmp/cache/templates",  %mk_opts );
-    mkpath( "$doc_root/tmp/uploads",          %mk_opts );
+    $doc_root =~ s/\/+$//g;
 
-    chmod 0755, "$doc_root";
-    chmod 0755, "$doc_root/app";
-    chmod 0755, "$doc_root/app/$project";
-    chmod 0755, "$doc_root/app/$project/Example";
-    chmod 0755, "$doc_root/bin";
-    chmod 0755, "$doc_root/conf";
-    chmod 0755, "$doc_root/htdocs";
-    chmod 0700, "$doc_root/logs";
+    mkpath( "$doc_root/app",                  $verbose, 0755 );
+    mkpath( "$doc_root/bin",                  $verbose, 0755 );
+    mkpath( "$doc_root/conf",                 $verbose, 0755 );
+    mkpath( "$doc_root/htdocs",               $verbose, 0755 );
+    mkpath( "$doc_root/logs",                 $verbose, 0700 );
+    mkpath( "$doc_root/templates",            $verbose );
+    mkpath( "$doc_root/tmp",                  $verbose );
+    mkpath( "$doc_root/tmp/cache",            $verbose );
+    mkpath( "$doc_root/tmp/cache/templates",  $verbose );
+    mkpath( "$doc_root/tmp/uploads",          $verbose );
+
+    # File::Path ignores default 0777, use chmod instead
     chmod 0777, "$doc_root/templates";
     chmod 0777, "$doc_root/tmp";
     chmod 0777, "$doc_root/tmp/cache";
@@ -136,7 +122,7 @@ sub process {
     $self->write_file( 'template.tt',    "$doc_root/templates/example.tt"    );
     $self->write_file( 'error.tt',       "$doc_root/templates/error.tt"      );
 
-    print "Project '$project' created successfully\n";
+    print "\033[33mProject '$project' created successfully\033[0m\n";
     exit;
 }
 
@@ -182,7 +168,7 @@ __END__
 
 =head1 NAME
 
-Apache2::WebApp::Helper::Project - Command-line script module
+Apache2::WebApp::Helper::Project - Command-line helper script
 
 =head1 SYNOPSIS
 

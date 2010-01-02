@@ -6,7 +6,7 @@ use strict;
 our $VERSION = [% project_version || '0.01' %];
 
 use base qw(
-  [% project_title FILTER ucfirst %]::Base
+  [% project_title %]::Base
   );
 
 #----------------------------------------------------------------------------+

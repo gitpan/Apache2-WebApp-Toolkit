@@ -20,6 +20,7 @@ use strict;
 use warnings;
 use Apache2::Log;
 use Params::Validate qw( :all );
+
 our $VERSION = 0.02;
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~[  OBJECT METHODS  ]~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#

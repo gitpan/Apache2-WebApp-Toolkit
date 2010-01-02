@@ -1,4 +1,4 @@
-package [% project_title FILTER ucfirst %]::Base;
+package [% project_title %]::Base;
 
 use strict;
 #use warnings;     # debug
@@ -11,15 +11,10 @@ our $VERSION = [% project_version || '0.01' %];
 sub _global {
     my ( $self, $c ) = @_;
 
-[%- USE dir1 = Directory('/usr/share/webapp-toolkit/plugin_base') -%]
-[%- USE dir2 = Directory('/usr/share/webapp-toolkit/extra_base')  -%]
+[%- USE dir = Directory('/usr/share/webapp-toolkit/plugin/base') -%]
 
-[%- FOREACH file = dir1.files %]
-[%  PROCESS "plugin_base/$file.name" %]
-[%- END -%]
-
-[%- FOREACH file = dir2.files %]
-[%  PROCESS "extra_base/$file.name" %]
+[%- FOREACH file = dir.files %]
+[%  PROCESS "plugin/base/$file.name" %]
 [%- END -%]
 
     return $c;
@@ -55,7 +50,7 @@ Base.pm
 
 =head1 SYNOPSIS
 
-  use [% project_title FILTER ucfirst %]::Base;
+  use [% project_title %]::Base;
 
 =head1 DESCRIPTION
 

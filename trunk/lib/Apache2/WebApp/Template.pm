@@ -20,7 +20,7 @@ use warnings;
 use base 'Apache2::WebApp::Base';
 use Template;
 
-our $VERSION = 0.01;
+our $VERSION = 0.02;
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~[  OBJECT METHODS  ]~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
@@ -47,8 +47,8 @@ sub _init {
     my ( $self, $config ) = @_;
 
     return Template->new(
-        CACHE_SIZE   => $config->{template_cache_size},
-        COMPILE_DIR  => $config->{template_compile_dir} || $config->{template_include_path},
+        CACHE_SIZE   => $config->{template_cache_size} || 0,
+        COMPILE_DIR  => $config->{template_compile_dir},
         INCLUDE_PATH => $config->{template_include_path},
         STAT_TTL     => $config->{template_stat_ttl}
       )

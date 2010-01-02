@@ -28,7 +28,7 @@ use Apache2::Upload;
 use Apache2::Const qw( :common :http );
 use Apache2::Log;
 
-our $VERSION = 0.20;
+our $VERSION = 0.21;
 
 use Apache2::WebApp::AppConfig;
 use Apache2::WebApp::Plugin;
@@ -155,7 +155,7 @@ sub dispatch {
     }
 
     $module =~ s/\//::/g;
-    $module =~ s/\.pm//g;
+    $module =~ s/\.pm$//;
 
     unshift @ISA, $module;
 
@@ -353,7 +353,7 @@ this process to insure write permission is allowed within the installation direc
 
 =head3 Create a new class
 
-  $ webapp-class --config /path/to/conf/webapp.conf
+  $ webapp-class --config /path/to/conf/webapp.conf --name ClassName
 
 =head3 Start your application
 
@@ -411,6 +411,15 @@ Example:
   use Project::Foo;
 
 E) Password file used for restricting access to a specified path (see C<httpd.conf>).
+
+The login information below is currently set-up by default.
+
+  User Name       admin
+  Password        password
+
+You can change the login password using the C<htpasswd> command-line script.
+
+  $ htpasswd /var/www/project/conf/htpasswd admin
 
 F) Apache server I<Virtual Host> configuration.
 

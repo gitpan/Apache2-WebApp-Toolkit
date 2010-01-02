@@ -20,7 +20,7 @@ use warnings;
 use base 'Apache2::WebApp::Helper';
 use Getopt::Long qw( :config pass_through );
 
-our $VERSION = 0.02;
+our $VERSION = 0.03;
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~[  OBJECT METHODS  ]~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
@@ -48,6 +48,8 @@ sub process {
     if ( $opts{help}     ||
         !$opts{doc_root} ) {
 
+        print "\033[33mMissing or invalid options\033[0m\n\n";
+
         $self->help;
     }
 
@@ -56,10 +58,10 @@ sub process {
     my $conf     = $opts{httpd_conf} ||= '/etc/httpd/conf/httpd.conf';
     my $debug    = $opts{debug};
 
-    $self->error("The document root selected is not valid")
+    $self->error("\033[31m--doc_root selected is not valid\033[0m")
       unless (-d $doc_root);
 
-    $self->error("The Apache binary selected is not valid")
+    $self->error("\033[31m--httpd_bin selected is not valid\033[0m")
       unless (-f $bin && $bin =~ /\/httpd$/);
 
     sleep 1;

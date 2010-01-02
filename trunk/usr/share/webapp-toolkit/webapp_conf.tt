@@ -20,13 +20,8 @@ compile_dir        = [% apache_doc_root %]/tmp/templates        # path to templa
 include_path       = [% apache_doc_root %]/templates            # path to template directory
 stat_ttl           = 60                                         # template to HTML build time (in seconds)
 
-[%- USE dir1 = Directory('/usr/share/webapp-toolkit/plugin_conf') -%]
-[%- USE dir2 = Directory('/usr/share/webapp-toolkit/extra_conf')  -%]
+[%- USE dir = Directory('/usr/share/webapp-toolkit/plugin/conf') -%]
 
-[%- FOREACH file = dir1.files %]
-[%  PROCESS "plugin_conf/$file.name" %]
-[%- END -%]
-
-[%- FOREACH file = dir2.files %]
-[%  PROCESS "extra_conf/$file.name" %]
+[%- FOREACH file = dir.files %]
+[%  PROCESS "plugin/conf/$file.name" %]
 [%- END -%]

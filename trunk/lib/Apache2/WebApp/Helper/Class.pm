@@ -19,10 +19,9 @@ use strict;
 use warnings;
 use base 'Apache2::WebApp::Helper';
 use Cwd;
-use File::Path;
 use Getopt::Long qw( :config pass_through );
 
-our $VERSION = 0.04;
+our $VERSION = 0.05;
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~[  OBJECT METHODS  ]~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
@@ -45,7 +44,6 @@ sub process {
         'project_email=s',
         'project_version=s',
         'config=s',
-        'mkdir',
         'template',
         'help',
         'verbose',
@@ -62,45 +60,39 @@ sub process {
         !$opts{project_title}   ||
         !$opts{name}            ) {
 
+        print "\033[33mMissing or invalid options\033[0m\n\n";
+
         $self->help;
     }
 
-    my $verbose = $opts{verbose};
+    my $doc_root = $opts{apache_doc_root};
+    my $name     = $opts{name};
+    my $verbose  = $opts{verbose};
 
     print "Creating the class...\n" if ($verbose);
 
-    my $class = ucfirst( $opts{name} );
+    my $app_path = getcwd;
+    my $class    = ucfirst($name);
+    my $outfile = "$app_path/$class";
 
     $self->error("\033[31m--name must be alphanumeric with no spaces\033[0m")
-      unless ($class =~ /^\w+?$/);
+      unless ($name =~ /^\w+?$/);
 
-    my $app_path = getcwd;
-    my $doc_root = $opts{apache_doc_root};
-
-    $self->error("\033[31mFailed to create class outside the project directory\033[0m")
+    $self->error("\033[31m--name cannot be created outside project directory\033[0m")
       unless ($app_path =~ /^$doc_root\/app\//);
 
-    my $new_file = "$app_path/$class";
-
     $self->error("\033[31m--name of the same name already exists\033[0m")
-      if (-f "$new_file\.pm");
+      if (-f "$outfile\.pm");
 
-    if ( $opts{mkdir} ) {
-        my %mk_opts = ($verbose) ? ( verbose => 1 ) : ();
-
-        mkpath( $new_file, %mk_opts );
-
-        chmod 0755, $new_file;
-    }
-
-    my $package = $new_file;
+    my $package = $outfile;
     $package =~ s/^.*\/app\/(.*)/$1/gs;
+    $package =~ s/(?:^|(?<=\/))(\w)/uc($1)/eg;
     $package =~ s/\//::/g;
-    $package =~ s/\b(\w)/uc($1)/eg;
 
-    my $template = $new_file;
+    my $template = $package;
     $template =~ s/^.*\/app\/\w+?\/(.*)/$1/gs;
-    $template =~ s/\//_/g;
+    $template =~ s/(?:^|(?<=::))(\w)/lc($1)/eg;
+    $template =~ s/::/_/g;
 
     $self->set_vars({
         %opts,
@@ -112,7 +104,7 @@ sub process {
     $self->write_file( 'template.tt', "$doc_root/templates/$template\.tt" )
       if ( $opts{template} );
 
-    print "Class created successfully\n";
+    print "\033[33mClass '$class' created successfully\033[0m\n";
     exit;
 }
 
@@ -141,7 +133,6 @@ WebApp::Helper::Class - Add a new class or template to an existing project
       --project_email       E-mail address of the class owner
       --project_version     Version number of your class
 
-      --mkdir               Class contains subclasses, create a directory for them
       --template            Associate a tenplate with this class
 
       --help                List available command line options (this page)
@@ -191,7 +182,6 @@ Add a new class or template to an existing project.
         --project_email       E-mail address of the class owner
         --project_version     Version number of your class
 
-        --mkdir               Class contains subclasses, create a directory for them
         --template            Associate a tenplate with this class
 
         --help                List available command line options (this page)

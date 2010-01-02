@@ -31,7 +31,7 @@
 	<ul>
 		<li>Click your browser's REFRESH button to try reconnecting to this page.</li>
 		<li>Click your browser's BACK button to return to the previous page.</li>
-		<li>Click <a href="/" title="Back">here</a> to go to the [% apache_domain FILTER upper %] homepage.</li>
+		<li>Click <a href="javascript:window.history.go(-1)" title="Back">here</a> to go to the [% apache_domain FILTER upper %] homepage.</li>
 		<li>If you continue to experience this error, click <a href="mailto:[% project_email %]">here</a> to report it.</li>
 	</ul>
 [% stag; 'END'; etag %]
