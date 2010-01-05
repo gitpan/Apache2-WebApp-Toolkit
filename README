@@ -126,7 +126,10 @@ GETTING STARTED
       $ source /path/to/project/.projrc
 
    Create a new class
-      $ webapp-class --config /path/to/conf/webapp.conf --name ClassName
+      $ webapp-class ClassName
+
+   Add a pre-packaged *Extra* to an existing project
+      $ webapp-extra ExtraName
 
    Start your application
       $ webapp-kickstart

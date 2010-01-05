@@ -28,7 +28,7 @@ use Apache2::Upload;
 use Apache2::Const qw( :common :http );
 use Apache2::Log;
 
-our $VERSION = 0.22;
+our $VERSION = 0.23;
 
 use Apache2::WebApp::AppConfig;
 use Apache2::WebApp::Plugin;
@@ -353,7 +353,11 @@ this process to insure write permission is allowed within the installation direc
 
 =head3 Create a new class
 
-  $ webapp-class --config /path/to/conf/webapp.conf --name ClassName
+  $ webapp-class ClassName
+
+=head3 Add a pre-packaged I<Extra> to an existing project
+
+  $ webapp-extra ExtraName
 
 =head3 Start your application
 
