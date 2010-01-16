@@ -3,9 +3,9 @@
 #  Apache2::WebApp::Helper::Extra - Command-line helper script
 #
 #  DESCRIPTION
-#  What is an Extra?  It is a pre-package web application that can be easily
-#  added to an existing project.  Each package provides additional
-#  functionality that can be easily modified and extended to your needs.
+#  What is an Extra?  It is a pre-package web application that can be added
+#  to an existing WebApp::Toolkit project.  Each package provides additional
+#  functionality that can be modified and extended to your needs.
 #
 #  AUTHOR
 #  Marc S. Brooks <mbrooks@cpan.org>
@@ -141,7 +141,7 @@ sub help {
     print <<ERR_OUT;
 Usage: webapp-extra [OPTION...]
 
-WebApp::Helper::Extra - 
+WebApp::Helper::Extra - Add package sources to an existing project
 
  Options:
 
@@ -178,15 +178,15 @@ Apache2::WebApp::Helper::Extra - Command-line helper script
 
 =head1 DESCRIPTION
 
-What is an Extra?  It is a pre-package web application that can be easily
-added to an existing project.  Each package provides additional
-functionality that can be easily modified and extended to your needs.
+What is an Extra?  It is a pre-package web application that can be added
+to an existing WebApp::Toolkit project.  Each package provides additional
+functionality that can be modified and extended to your needs.
 
 =head2 COMMAND-LINE
 
   Usage: webapp-extra [OPTION...]
 
-  WebApp::Helper::Extra - 
+  WebApp::Helper::Extra - Add package sources to an existing project
 
     Options:
 

@@ -28,7 +28,7 @@ use Apache2::Upload;
 use Apache2::Const qw( :common :http );
 use Apache2::Log;
 
-our $VERSION = 0.25;
+our $VERSION = 0.26;
 
 use Apache2::WebApp::AppConfig;
 use Apache2::WebApp::Plugin;
@@ -324,7 +324,7 @@ From source:
 
 Perl one liner using CPAN.pm:
 
-  perl -MCPAN -e 'install Apache2::WebApp'
+  $ perl -MCPAN -e 'install Apache2::WebApp'
 
 Use of CPAN.pm in interactive mode:
 

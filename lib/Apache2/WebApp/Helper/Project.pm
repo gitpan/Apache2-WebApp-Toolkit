@@ -122,6 +122,8 @@ sub process {
     $self->write_file( 'template.tt',    "$doc_root/templates/example.tt"    );
     $self->write_file( 'error.tt',       "$doc_root/templates/error.tt"      );
 
+    chmod 0666, "$doc_root/conf/htpasswd";
+
     print "\033[33mProject '$project' created successfully\033[0m\n";
     exit;
 }

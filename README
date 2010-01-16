@@ -101,7 +101,7 @@ INSTALLATION
 
     Perl one liner using CPAN.pm:
 
-      perl -MCPAN -e 'install Apache2::WebApp'
+      $ perl -MCPAN -e 'install Apache2::WebApp'
 
     Use of CPAN.pm in interactive mode:
 
