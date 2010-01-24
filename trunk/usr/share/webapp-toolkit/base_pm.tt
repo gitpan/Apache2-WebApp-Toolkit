@@ -1,0 +1,69 @@
+package [% project_title %]::Base;
+
+use strict;
+#use warnings;     # debug
+
+our $VERSION = [% project_version || '0.01' %];
+
+#----------------------------------------------------------------------------+
+# _global(\%controller)
+
+sub _global {
+    my ( $self, $c ) = @_;
+
+[%- USE dir = Directory('/usr/share/webapp-toolkit/plugin/base') -%]
+
+[%- FOREACH file = dir.files %]
+[%  PROCESS "plugin/base/$file.name" %]
+[%- END -%]
+
+    return $c;
+}
+
+#----------------------------------------------------------------------------+
+# _error( \%controller, $title, $value )
+
+sub _error {
+    my ( $self, $c, $title, $value ) = @_;
+
+    $c->request->content_type('text/html');
+
+    $c->template->process(
+        'error.tt',
+        {
+            title  => $title,
+            output => ( $c->config->{debug} == 1 ) ? $value : undef,
+        }
+      )
+      or die $c->template->error();
+
+    exit;
+}
+
+1;
+
+__END__
+
+=head1 NAME
+
+Base.pm
+
+=head1 SYNOPSIS
+
+  use [% project_title %]::Base;
+
+=head1 DESCRIPTION
+
+Common methods to be inherited by all classes.
+
+=head1 OBJECT METHODS
+
+=head2 _global(\%controller)
+
+=head2 _error( \%controller, $title, $value )
+
+=head1 AUTHOR
+
+[% project_author || 'Your Name Here' %], E<lt>[% project_email || 'alias@domain.com' FILTER lower %]E<gt>
+
+=cut
