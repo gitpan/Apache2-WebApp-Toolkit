@@ -4,7 +4,7 @@
 #
 #  DESCRIPTION
 #  What is an Extra?  It is a pre-package web application that can be added
-#  to an existing WebApp::Toolkit project.  Each package provides additional
+#  to an existing WebApp Toolkit project.  Each package provides additional
 #  functionality that can be modified and extended to your needs.
 #
 #  AUTHOR
@@ -24,12 +24,12 @@ use File::Copy::Recursive qw( dircopy );
 use File::Path;
 use Getopt::Long qw( :config pass_through );
 
-our $VERSION = 0.01;
+our $VERSION = 0.02;
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~[  OBJECT METHODS  ]~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
 #----------------------------------------------------------------------------+
-# process()
+# process
 #
 # Based on command-line arguments, install the package.
 
@@ -42,6 +42,7 @@ sub process {
         \%opts,
         'config=s',
         'install=s',
+        'source=s',
         'force',
         'help',
         'verbose',
@@ -64,6 +65,7 @@ sub process {
     my $project  = $opts{project_title};
     my $doc_root = $opts{apache_doc_root};
     my $install  = $opts{install};
+    my $source = ( $opts{source} ) ? $opts{source} : '/usr/share/webapp-toolkit';
     my $force    = $opts{force};
     my $verbose  = $opts{verbose};
 
@@ -77,6 +79,9 @@ sub process {
 
     $self->error("\033[31m--install must be alphanumeric with no spaces\033[0m")
       unless ($install =~ /^\w+?$/);
+
+    $self->error("\033[31m--source directory selected does not exist\033[0m")
+      unless (-d $source);
 
     my $name = ucfirst($install);
 
@@ -95,13 +100,14 @@ sub process {
     mkpath( "$doc_root/htdocs/extras/$outdir",    $verbose, 0755 );
     mkpath( "$doc_root/templates/extras/$outdir", $verbose, 0777 );
 
-    dircopy( '/usr/share/webapp-toolkit/extra/htdocs/admin',    "$doc_root/htdocs/extras/admin"    ) or die $!;
-    dircopy( '/usr/share/webapp-toolkit/extra/templates/admin', "$doc_root/templates/extras/admin" ) or die $!;
+    dircopy( "$source/extra/htdocs/admin",    "$doc_root/htdocs/extras/admin"    ) or die $!;
+    dircopy( "$source/extra/templates/admin", "$doc_root/templates/extras/admin" ) or die $!;
 
     $self->set_vars(\%opts);
 
-    my @files = glob "/usr/share/webapp-toolkit/extra/class/$outdir/*.tt";
+    my @files = glob "$source/extra/class/$outdir/*.tt";
 
+    # create the classes
     foreach my $file (@files) {
 
         $file =~ s/^(?:.+)\/(\w+|_)\.tt$/$1/;
@@ -126,6 +132,17 @@ sub process {
         $self->write_file( "extra/class/admin/$file\.tt", $class );
     }
 
+    # add class names to the project - startup.pl
+    open (INFILE, "$source/extra/startup/$install") or $self->error("Cannot open file: $!");
+    open (OUTFILE, ">>$doc_root/bin/startup.pl")    or $self->error("Cannot open file: $!");
+
+    while (<INFILE>) {
+        print OUTFILE "$project\::$_";
+    }
+
+    close(OUTFILE);
+    close(INFILE);
+
     print "\033[33mPackage '$name' installation complete\033[0m\n";
     exit;
 }
@@ -148,6 +165,8 @@ WebApp::Helper::Extra - Add package sources to an existing project
       --config (default)    Instead of passing arguments, import these values from a file
 
       --install             Name of the Extra to install (example: Admin)
+
+      --source              Specify a custom source directory (default: /usr/share/webapp-toolkit)
 
       --force               Ignore warnings and install the package
 
@@ -179,7 +198,7 @@ Apache2::WebApp::Helper::Extra - Command-line helper script
 =head1 DESCRIPTION
 
 What is an Extra?  It is a pre-package web application that can be added
-to an existing WebApp::Toolkit project.  Each package provides additional
+to an existing WebApp Toolkit project.  Each package provides additional
 functionality that can be modified and extended to your needs.
 
 =head2 COMMAND-LINE
@@ -193,6 +212,8 @@ functionality that can be modified and extended to your needs.
         --config (default)    Instead of passing arguments, import these values from a file
 
         --install             Name of the Extra to install (example: Admin)
+
+        --source              Specify a custom source directory (default: /usr/share/webapp-toolkit)
 
         --force               Ignore warnings and install the package
 

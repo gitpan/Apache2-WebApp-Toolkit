@@ -28,7 +28,7 @@ use Apache2::Upload;
 use Apache2::Const qw( :common :http );
 use Apache2::Log;
 
-our $VERSION = 0.26;
+our $VERSION = 0.27;
 
 use Apache2::WebApp::AppConfig;
 use Apache2::WebApp::Plugin;
@@ -411,8 +411,11 @@ Example:
 
   use lib '/var/www/project/app';
 
-  # Preload classes - Modules added here will be URI accessible
-  use Project::Foo;
+  ..
+
+  # Modules added here will be URI accessible 
+  __DATA__ 
+  Project::Foo
 
 E) Password file used for restricting access to a specified path (see C<httpd.conf>).
 

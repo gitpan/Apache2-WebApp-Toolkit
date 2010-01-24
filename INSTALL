@@ -14,7 +14,6 @@ Perl one liner using CPAN.pm:
 Use of CPAN.pm in interactive mode:
 
   $ perl -MCPAN -e shell
-
   cpan> install Apache2::WebApp
   cpan> quit
 

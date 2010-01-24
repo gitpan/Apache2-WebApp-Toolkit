@@ -182,8 +182,11 @@ GETTING STARTED
 
       use lib '/var/www/project/app';
 
-      # Preload classes - Modules added here will be URI accessible
-      use Project::Foo;
+      ..
+
+      # Modules added here will be URI accessible 
+      __DATA__ 
+      Project::Foo
 
     E) Password file used for restricting access to a specified path (see
     "httpd.conf").

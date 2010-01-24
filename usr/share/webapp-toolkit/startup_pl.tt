@@ -11,7 +11,17 @@ $ENV{MOD_PERL} or die "Not running under mod_perl";
 
 use lib '[% apache_doc_root %]/app';
 
-# Preload classes - Modules added here will be URI accessible
-use [% project_title %]::Example;
+# Preload application classes
+while (<DATA>) {
+    unless ( $_->can('isa') ) {
+        eval "require $_";
+
+        die  "Failed to load package '$_': $@" if $@;
+    }
+}
 
 1;
+
+# Modules added here will be URI accessible
+__DATA__
+[% project_title %]::Example

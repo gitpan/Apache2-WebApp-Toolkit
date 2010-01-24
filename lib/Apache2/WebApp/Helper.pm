@@ -24,7 +24,7 @@ use Params::Validate qw( :all );
 use Apache2::WebApp::AppConfig;
 use Apache2::WebApp::Template;
 
-our $VERSION = 0.02;
+our $VERSION = 0.03;
 our $AUTOLOAD;
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~[  OBJECT METHODS  ]~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
@@ -37,9 +37,7 @@ our $AUTOLOAD;
 sub new {
     my $class = shift;
 
-    my %config = (
-        template_include_path => '/usr/share/webapp-toolkit',
-      );
+    my %config = ( template_include_path => '/usr/share/webapp-toolkit' );
 
     return bless( {
         CONFIG   => Apache2::WebApp::AppConfig->new,
