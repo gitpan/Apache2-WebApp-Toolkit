@@ -105,7 +105,7 @@ INSTALLATION
 
     Use of CPAN.pm in interactive mode:
 
-      $> perl -MCPAN -e shell
+      $ perl -MCPAN -e shell
       cpan> install Apache2::WebApp
       cpan> quit
 

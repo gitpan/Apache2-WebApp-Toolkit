@@ -36,7 +36,7 @@ WriteMakefile(
     clean => {
         FILES => "@{ clean_files() }",
     }
-);
+  );
 
 sub clean_files {
     return [@scripts];

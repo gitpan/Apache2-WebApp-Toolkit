@@ -20,7 +20,7 @@ use warnings;
 use base 'Apache2::WebApp::Helper';
 use Getopt::Long qw( :config pass_through );
 
-our $VERSION = 0.03;
+our $VERSION = 0.04;
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~[  OBJECT METHODS  ]~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
@@ -75,7 +75,7 @@ sub process {
         print "Stopping Apache:   \t\t\t\t\t   [ \033[32m OK \033[0m ]\n";
 
         kill("TERM", $pid)
-          or $self->error("Unable to stop Apache process");
+          or print "Found httpd.pid but the Apache process does not exist.\n";
 
         unlink("$doc_root/tmp/httpd.pid")
           or $self->error("Cannot remove file: $!");

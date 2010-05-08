@@ -28,7 +28,7 @@ use Apache2::Upload;
 use Apache2::Const qw( :common :http );
 use Apache2::Log;
 
-our $VERSION = 0.29;
+our $VERSION = 0.30;
 
 use Apache2::WebApp::AppConfig;
 use Apache2::WebApp::Plugin;
@@ -328,7 +328,7 @@ Perl one liner using CPAN.pm:
 
 Use of CPAN.pm in interactive mode:
 
-  $> perl -MCPAN -e shell
+  $ perl -MCPAN -e shell
   cpan> install Apache2::WebApp
   cpan> quit
 
@@ -431,7 +431,7 @@ You can change the login password using the C<htpasswd> command-line script.
 F) Apache server I<Virtual Host> configuration.
 
 G) Application configuration.  This file contains your project settings.  Due to
-security reasons, this file should always remain outside the I<htdocs/> directory path.
+security reasons, this file should always remain outside the I</htdocs> directory path.
 
 Example:
 
@@ -462,7 +462,7 @@ I) Basic template.
 J) Application error templates.
 
 K) Apache log directory that contains both access and error logs.  Due to security
-reasons, this directory should always remain outside the I<htdocs/> directory path.
+reasons, this directory should always remain outside the I</htdocs> directory path.
 
 L) Temporary shared space for file processing.
 

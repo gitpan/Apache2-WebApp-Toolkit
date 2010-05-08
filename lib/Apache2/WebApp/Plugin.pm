@@ -20,7 +20,7 @@ use warnings;
 use base 'Apache2::WebApp::Base';
 use Params::Validate qw( :all );
 
-our $VERSION = 0.02;
+our $VERSION = 0.03;
 our $AUTOLOAD;
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~[  OBJECT METHODS  ]~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
@@ -124,11 +124,11 @@ L<Apache2::WebApp::Plugin::Validate> - Common methods used for validating user i
 
 Perl one liner using CPAN.pm:
 
-  perl -MCPAN -e 'install Apache2::WebApp::Plugin::Name'
+  $ perl -MCPAN -e 'install Apache2::WebApp::Plugin::Name'
 
 Use of CPAN.pm in interactive mode:
 
-  $> perl -MCPAN -e shell
+  $ perl -MCPAN -e shell
   cpan> install Apache2::WebApp::Plugin::Name
   cpan> quit
 

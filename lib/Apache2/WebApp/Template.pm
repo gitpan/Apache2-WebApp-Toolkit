@@ -113,7 +113,7 @@ options can be easily configured in your project I<webapp.conf>
 
   [% foo %]
 
-  [% FOREACH bucket = bar %]
+  [% FOREACH bucket = baz %]
       [% bucket %]
   [% END %]
 
