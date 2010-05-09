@@ -24,7 +24,7 @@ use File::Copy::Recursive qw( dircopy );
 use File::Path;
 use Getopt::Long qw( :config pass_through );
 
-our $VERSION = 0.03;
+our $VERSION = 0.04;
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~[  OBJECT METHODS  ]~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
@@ -83,9 +83,11 @@ sub process {
     $self->error("\033[31m--source directory selected does not exist\033[0m")
       unless (-d $source);
 
-    my $name = ucfirst($install);
+    my $module= $install;
+    $module =~ s/(?:^|(?<=\_))(\w)/uc($1)/eg;
+    $module =~ s/\_/\:\:/g;
 
-    my $package = "Apache2::WebApp::Extra::$name";
+    my $package = "Apache2::WebApp::Extra::$module";
 
     unless ( $package->can('isa') ) {
         eval "require $package";
@@ -95,7 +97,9 @@ sub process {
 
     print "Updating project '$project' with new sources\n" if ($verbose);
 
-    my $outdir = lc($name);
+    $module =~ s/\:\:/\//g;
+
+    my $outdir = lc($module);
 
     mkpath( "$doc_root/htdocs/extras/$outdir",    $verbose, 0755 );
     mkpath( "$doc_root/templates/extras/$outdir", $verbose, 0777 );
@@ -145,7 +149,7 @@ sub process {
     close(OUTFILE);
     close(INFILE);
 
-    print "\033[33mPackage '$name' installation complete\033[0m\n";
+    print "\033[33mPackage '$module' installation complete\033[0m\n";
     exit;
 }
 
