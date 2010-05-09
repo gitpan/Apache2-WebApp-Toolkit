@@ -24,4 +24,4 @@ while (<DATA>) {
 
 # Modules added here will be URI accessible
 __DATA__
-[% project_title %]::Example
+[% project_title %]::Example 

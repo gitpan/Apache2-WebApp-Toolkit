@@ -24,7 +24,7 @@ use File::Copy::Recursive qw( dircopy );
 use File::Path;
 use Getopt::Long qw( :config pass_through );
 
-our $VERSION = 0.04;
+our $VERSION = 0.05;
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~[  OBJECT METHODS  ]~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
@@ -83,8 +83,9 @@ sub process {
     $self->error("\033[31m--source directory selected does not exist\033[0m")
       unless (-d $source);
 
-    my $module= $install;
-    $module =~ s/(?:^|(?<=\_))(\w)/uc($1)/eg;
+    $install =~ s/(?:^|(?<=\_))(\w)/uc($1)/eg;
+
+    my $module = $install;
     $module =~ s/\_/\:\:/g;
 
     my $package = "Apache2::WebApp::Extra::$module";
@@ -97,15 +98,23 @@ sub process {
 
     print "Updating project '$project' with new sources\n" if ($verbose);
 
-    $module =~ s/\:\:/\//g;
+    my $outdir = lc($install);
+    my $ht_dir = "$doc_root/htdocs/extras/$outdir";
+    my $ht_src = "$source/extra/htdocs/$outdir";
+    my $tt_dir = "$doc_root/templates/extras/$outdir";
+    my $tt_src = "$source/extra/templates/$outdir";
 
-    my $outdir = lc($module);
+    # copy the website sources
+    if (-e $ht_src) {
+        mkpath(  $ht_dir, $verbose, 0755 );
+        dircopy( $ht_src, $ht_dir ) or die $!;
+    }
 
-    mkpath( "$doc_root/htdocs/extras/$outdir",    $verbose, 0755 );
-    mkpath( "$doc_root/templates/extras/$outdir", $verbose, 0777 );
-
-    dircopy( "$source/extra/htdocs/admin",    "$doc_root/htdocs/extras/admin"    ) or die $!;
-    dircopy( "$source/extra/templates/admin", "$doc_root/templates/extras/admin" ) or die $!;
+    # copy the templates
+    if (-e $tt_src) {
+        mkpath(  $tt_dir, $verbose, 0777 );
+        dircopy( $tt_src, $tt_dir ) or die $!;
+    }
 
     $self->set_vars(\%opts);
 
@@ -133,14 +142,12 @@ sub process {
         $self->error("\033[31m--install already exists.  Must use --force to install\033[0m")
           if (-e $class && !$force);
 
-        $self->write_file( "extra/class/admin/$file\.tt", $class );
+        $self->write_file( "extra/class/$outdir/$file\.tt", $class );
     }
 
     # add class names to the project - startup.pl
     open (INFILE, "$source/extra/startup/$install") or $self->error("Cannot open file: $!");
     open (OUTFILE, ">>$doc_root/bin/startup.pl")    or $self->error("Cannot open file: $!");
-
-    print OUTFILE "\n";
 
     while (<INFILE>) {
         print OUTFILE "$project\::$_";
@@ -149,7 +156,7 @@ sub process {
     close(OUTFILE);
     close(INFILE);
 
-    print "\033[33mPackage '$module' installation complete\033[0m\n";
+    print "\033[33mPackage '$install' installation complete\033[0m\n";
     exit;
 }
 
