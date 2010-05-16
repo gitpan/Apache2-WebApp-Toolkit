@@ -37,6 +37,7 @@ sub set {
           { type => SCALAR },
           { type => ARRAYREF | HASHREF | SCALAR | UNDEF }
           );
+
     $self->{ uc($name) } = $vars;
     return $self->{ uc($name) };
 }
@@ -52,6 +53,7 @@ sub get {
           { type => OBJECT },
           { type => SCALAR }
           );
+
     return $self->{ uc($name) };
 }
 

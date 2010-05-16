@@ -50,7 +50,7 @@ sub parse {
           );
 
         $config->file($file);
-    };
+      };
 
     if ($@) {
         $self->error("Failed to parse config '$file'");

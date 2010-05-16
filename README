@@ -48,7 +48,13 @@ DESCRIPTION
       use strict;
       use warnings;
 
-      # this method is executed for every request
+      # construct as an object (optional)
+      sub new {
+          my $class = shift;
+          return bless( {}, $class );
+      }
+
+      # this method is executed for every request (optional)
       sub _global {
           my ( $self, $c ) = @_;
 
@@ -64,7 +70,7 @@ DESCRIPTION
           $self->_print_result( $c, 'bar' );
       }
 
-      # _ always denotes a private method
+      # _ always denotes a private method (not URI accessible)
       sub _print_result {
           my ( $self, $c, $output ) = @_;
 
@@ -96,7 +102,7 @@ INSTALLATION
       $ tar xfz Apache2-WebApp-Toolkit-0.X.X.tar.gz
       $ perl MakeFile.PL PREFIX=~/path/to/custom/dir LIB=~/path/to/custom/lib
       $ make
-      $ make test     <-- Make sure you do this before contacting me
+      $ make test
       $ make install
 
     Perl one liner using CPAN.pm:
@@ -126,10 +132,10 @@ GETTING STARTED
       $ source /path/to/project/.projrc
 
    Create a new class
-      $ webapp-class ClassName
+      $ webapp-class --name ClassName
 
    Add a pre-packaged *Extra* to an existing project
-      $ webapp-extra ExtraName
+      $ webapp-extra --install PackageName 
 
    Start your application
       $ webapp-kickstart
@@ -205,28 +211,28 @@ GETTING STARTED
 
     G) Application configuration. This file contains your project settings.
     Due to security reasons, this file should always remain outside the
-    *htdocs/* directory path.
+    */htdocs* directory path.
 
     Example:
 
       [project]
-      title              = Project                           # must not contain spaces or special characters
+      title              = Project                                 # must not contain spaces or special characters
       author             = Your Name Here
       email              = email@domain.com
       version            = 0.01
 
       [apache]
-      doc_root           = /var/www/project                  # path to project directory
-      domain             = www.domain.com                    # valid domain name
-      disable_uploads    = 0                                 # allow file uploads
-      post_max           = 5242880                           # post max in bytes (example 5MB)
+      doc_root           = /var/www/project                        # path to project directory
+      domain             = www.domain.com                          # valid domain name
+      disable_uploads    = 0                                       # allow file uploads
+      post_max           = 5242880                                 # post max in bytes (example 5MB)
       temp_dir           = /var/www/project/tmp/uploads
 
       [template]
-      cache_size         = 100                               # total files to store in cache
-      compile_dir        = /var/www/project/tmp/templates    # path to template cache
-      include_path       = /var/www/project/templates        # path to template directory
-      stat_ttl           = 60                                # template to HTML build time (in seconds)
+      cache_size         = 100                                     # total files to store in cache
+      compile_dir        = /var/www/project/tmp/cache/templates    # path to template cache
+      include_path       = /var/www/project/templates              # path to template directory
+      stat_ttl           = 60                                      # template to HTML build time (in seconds)
 
     H) Website sources. This includes HTML, CSS, Javascript, and images.
     When setting up FTP access - restrict access to this directory only.
@@ -237,7 +243,7 @@ GETTING STARTED
 
     K) Apache log directory that contains both access and error logs. Due to
     security reasons, this directory should always remain outside the
-    *htdocs/* directory path.
+    */htdocs* directory path.
 
     L) Temporary shared space for file processing.
 

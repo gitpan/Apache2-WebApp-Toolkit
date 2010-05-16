@@ -16,7 +16,7 @@ temp_dir           = [% apache_doc_root %]/tmp/uploads
 
 [template]
 cache_size         = 100                                        # total files to store in cache
-compile_dir        = [% apache_doc_root %]/tmp/templates        # path to template cache
+compile_dir        = [% apache_doc_root %]/tmp/cache/templates  # path to template cache
 include_path       = [% apache_doc_root %]/templates            # path to template directory
 stat_ttl           = 60                                         # template to HTML build time (in seconds)
 

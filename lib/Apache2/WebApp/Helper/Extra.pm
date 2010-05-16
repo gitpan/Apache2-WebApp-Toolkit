@@ -24,7 +24,7 @@ use File::Copy::Recursive qw( dircopy );
 use File::Path;
 use Getopt::Long qw( :config pass_through );
 
-our $VERSION = 0.05;
+our $VERSION = 0.06;
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~[  OBJECT METHODS  ]~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
@@ -42,19 +42,25 @@ sub process {
         \%opts,
         'config=s',
         'install=s',
+        'manifest=s',
         'source=s',
         'force',
         'help',
         'verbose',
       );
 
-    if ( $opts{help}    ||
-        !$opts{config}  ||
-        !$opts{install} ) {
+    my $source = ( $opts{source} ) ? $opts{source} : '/usr/share/webapp-toolkit';
+
+    if ( $opts{help}   ||
+        !$opts{config} ||
+       (!$opts{install} && !$opts{manifest}) ) {
 
         print "\033[33mMissing or invalid options\033[0m\n\n";
 
         $self->help;
+    }
+    elsif ( $opts{manifest} ) {
+        $self->manifest( "$source/extra/manifest/" . $opts{manifest} );
     }
     else {
         my $config = $self->config->parse( $opts{config} );
@@ -65,7 +71,6 @@ sub process {
     my $project  = $opts{project_title};
     my $doc_root = $opts{apache_doc_root};
     my $install  = $opts{install};
-    my $source = ( $opts{source} ) ? $opts{source} : '/usr/share/webapp-toolkit';
     my $force    = $opts{force};
     my $verbose  = $opts{verbose};
 
@@ -118,14 +123,17 @@ sub process {
 
     $self->set_vars(\%opts);
 
-    my @files = glob "$source/extra/class/$outdir/*.tt";
-
     # create the classes
-    foreach my $file (@files) {
+    open (FILE, "$source/extra/manifest/$install") or $self->error("Cannot open file: $!");
+
+    while (<FILE>) {
+        chomp;
+
+        next unless (/\/class\/$install/i);
+
+        my $file = $_;
 
         $file =~ s/^(?:.+)\/(\w+|_)\.tt$/$1/;
-
-        next unless ($file);
 
         my $outfile = $file;
 
@@ -142,21 +150,44 @@ sub process {
         $self->error("\033[31m--install already exists.  Must use --force to install\033[0m")
           if (-e $class && !$force);
 
-        $self->write_file( "extra/class/$outdir/$file\.tt", $class );
+        $self->write_file( "extra/class/$file\.tt", $class );
     }
+
+    close(FILE);
 
     # add class names to the project - startup.pl
     open (INFILE, "$source/extra/startup/$install") or $self->error("Cannot open file: $!");
     open (OUTFILE, ">>$doc_root/bin/startup.pl")    or $self->error("Cannot open file: $!");
 
     while (<INFILE>) {
-        print OUTFILE "$project\::$_";
+        chomp;
+        print OUTFILE "$project\::$_\n";
     }
 
     close(OUTFILE);
     close(INFILE);
 
     print "\033[33mPackage '$install' installation complete\033[0m\n";
+    exit;
+}
+
+#----------------------------------------------------------------------------+
+# manifest()
+#
+# Command-line argument help menu.
+
+sub manifest {
+    my ( $self, $file) = @_;
+
+    print "This package provides the following files:\n";
+
+    open (FILE, $file) or $self->error("Cannot open file: $!");
+    while (<FILE>) {
+        chomp;
+        print " + $_\n";
+    }
+    close(FILE);
+
     exit;
 }
 
@@ -178,6 +209,7 @@ WebApp::Helper::Extra - Add package sources to an existing project
       --config (default)    Instead of passing arguments, import these values from a file
 
       --install             Name of the Extra to install (example: Admin)
+      --manifest            View the manifest of the select package.
 
       --source              Specify a custom source directory (default: /usr/share/webapp-toolkit)
 
@@ -225,6 +257,7 @@ functionality that can be modified and extended to your needs.
         --config (default)    Instead of passing arguments, import these values from a file
 
         --install             Name of the Extra to install (example: Admin)
+        --manifest            View the manifest of the select package.
 
         --source              Specify a custom source directory (default: /usr/share/webapp-toolkit)
 

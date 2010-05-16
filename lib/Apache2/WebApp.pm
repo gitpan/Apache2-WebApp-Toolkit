@@ -19,7 +19,6 @@ use strict;
 use warnings;
 no  warnings qw( uninitialized );
 use base qw( Apache2::WebApp::Base );
-use vars qw( @ISA );
 use Apache2::Request;
 use Apache2::RequestRec;
 use Apache2::RequestUtil;
@@ -28,7 +27,7 @@ use Apache2::Upload;
 use Apache2::Const qw( :common :http );
 use Apache2::Log;
 
-our $VERSION = 0.32;
+our $VERSION = 0.33;
 
 use Apache2::WebApp::AppConfig;
 use Apache2::WebApp::Plugin;
@@ -43,23 +42,23 @@ use Apache2::WebApp::Template;
 # mod_perl handler - Instanciate Apache2::WebApp::Toolkit objects.
 
 sub handler : method {
-    my ( $class, $r ) = @_;
+    my ( $self, $r ) = @_;
 
     my $config = Apache2::WebApp::AppConfig->new;
 
-    $class->{CONFIG} = $config->parse( $ENV{'WEBAPP_CONF'} );
+    $self->{CONFIG} = $config->parse( $ENV{'WEBAPP_CONF'} );
 
-    $class->{REQUEST} = Apache2::Request->new( $r,
-        DISABLE_UPLOADS => $class->{CONFIG}->{apache_disable_uploads},
-        POST_MAX        => $class->{CONFIG}->{apache_post_max},
-        TEMP_DIR        => $class->{CONFIG}->{apache_temp_dir}
+    $self->{REQUEST} = Apache2::Request->new( $r,
+        DISABLE_UPLOADS => $self->{CONFIG}->{apache_disable_uploads},
+        POST_MAX        => $self->{CONFIG}->{apache_post_max},
+        TEMP_DIR        => $self->{CONFIG}->{apache_temp_dir}
       );
 
-    $class->{PLUGIN}   = Apache2::WebApp::Plugin->new;
-    $class->{STASH}    = Apache2::WebApp::Stash->new;
-    $class->{TEMPLATE} = Apache2::WebApp::Template->new( $class->{CONFIG} ); 
+    $self->{PLUGIN}   = Apache2::WebApp::Plugin->new;
+    $self->{STASH}    = Apache2::WebApp::Stash->new;
+    $self->{TEMPLATE} = Apache2::WebApp::Template->new( $self->{CONFIG} ); 
 
-    $class->dispatch($class);
+    $self->dispatch;
 }
 
 #----------------------------------------------------------------------------+
@@ -123,64 +122,68 @@ sub stash {
 #~~~~~~~~~~~~~~~~~~~~~~~~~~[  PRIVATE METHODS  ]~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
 #----------------------------------------------------------------------------+
-# dispatch(\%controller)
+# dispatch
 #
-# Translates the $r->uri to class/method
+# Translate the $r->uri to class/method.
 
 sub dispatch {
-    my ( $self, $c ) = @_;
+    my $self = shift;
 
-    my $uri = substr( $c->request->uri, length( $c->request->location ) + 1 );
+    my $uri = substr( $self->request->uri, length($self->request->location) + 1 );
 
     unless ( $uri =~ /\A (\w+\/)*\w+ /xs ) {
-        $self->error( $c, "Malformed URI request" );
+        $self->error("Malformed URI request");
         return HTTP_BAD_REQUEST;
     }
 
     $uri =~ s/\/+$//g;
 
-    my $method;
+    my ( $module, $method );
 
-    unless ( $self->module_exists( $c, $uri ) ) {
+    unless ( $module = $self->module_exists($uri) ) {
         $method = $uri;
         $method =~ s/(?:.*?)\/(\w+?)(?:\/|)\z/$1/g;
         $uri    =~ s/(.*?)\/(?:\w+?)(?:\/|)\z/$1/g;
     }
 
-    my $module = $self->module_exists( $c, $uri );
-
-    unless ($module) {
-        $self->error( $c, "Failed to map URI ($uri) request" );
+    unless ( $module = $self->module_exists($uri) ) {
+        $self->error("Failed to map URI ($uri) request");
         return DECLINED;
     }
 
     $module =~ s/\//::/g;
     $module =~ s/\.pm$//;
 
-    unshift @ISA, $module;
+    unless ( $module->can('isa') ) {
+        eval "require $module";
 
-    $c = ( $module->can('_global') ) ? $module->_global($c) : $c;
+        $self->error("Failed to load class '$module': $@") if $@;
+    }
+
+    my $class = ( $module->can('_new') ) ? $module->_new : $module;
+
+    my $c = ( $module->can('_global') ) ? $module->_global($self) : $self;
 
     if ($method) {
         if ($method =~ /^\_/) {
-            $self->error( $c, "The method ($method) cannot contain a leading underscore" );
+            $self->error("The method ($method) cannot contain a leading underscore");
             return HTTP_BAD_REQUEST;
         }
 
-        if ($module->can($method) ) {
-            return $module->$method($c);
+        if ( $module->can($method) ) {
+            $class->$method($c);
         }
         else {
-            $self->error( $c, "The method ($method) doesn't exist in ($module)" );
+            $self->error("The method ($method) doesn't exist in ($module)");
             return DECLINED;
         }
     }
     else {
-        if ($module->can('_default') ) {
-            $module->_default($c);
+        if ( $module->can('_default') ) {
+            $class->_default($c);
         }
         else {
-            $self->error( $c, "The class ($module) is missing a _default() method" );
+            $self->error("The class ($module) is missing a _default() method");
             return DECLINED;
         }
     }
@@ -194,10 +197,10 @@ sub dispatch {
 # Search %INC for the selected module, return filename if exists.
 
 sub module_exists {
-    my ( $self, $c, $file ) = @_;
+    my ( $self, $file ) = @_;
     return unless $file;
 
-    my $project = $c->config->{project_title};
+    my $project = $self->config->{project_title};
 
     foreach (sort keys %INC) {
         return $_ if (/\A $project\/$file\.pm \z/xi);
@@ -208,11 +211,11 @@ sub module_exists {
 #----------------------------------------------------------------------------+
 # error( \%controller, $mesg )
 #
-# Silently - output errors/exceptions to log.
+# Quietly - output errors/exceptions to log.
 
 sub error {
-    my ( $self, $c, $mesg ) = @_;
-    $c->request->log_error($mesg);
+    my ( $self, $mesg ) = @_;
+    $self->request->log_error($mesg);
 }
 
 1;
@@ -269,7 +272,13 @@ Example:
   use strict;
   use warnings;
 
-  # this method is executed for every request
+  # construct as an object (optional)
+  sub _new {
+      my $class = shift;
+      return bless( {}, $class );
+  }
+
+  # this method is executed for every request (optional)
   sub _global {
       my ( $self, $c ) = @_;
 
@@ -285,7 +294,7 @@ Example:
       $self->_print_result( $c, 'bar' );
   }
 
-  # _ always denotes a private method
+  # _ always denotes a private method (not URI accessible)
   sub _print_result {
       my ( $self, $c, $output ) = @_;
 
@@ -319,7 +328,7 @@ From source:
   $ tar xfz Apache2-WebApp-Toolkit-0.X.X.tar.gz
   $ perl MakeFile.PL PREFIX=~/path/to/custom/dir LIB=~/path/to/custom/lib
   $ make
-  $ make test     <-- Make sure you do this before contacting me
+  $ make test
   $ make install
 
 Perl one liner using CPAN.pm:
@@ -353,11 +362,11 @@ this process to insure write permission is allowed within the installation direc
 
 =head3 Create a new class
 
-  $ webapp-class ClassName
+  $ webapp-class --name ClassName
 
 =head3 Add a pre-packaged I<Extra> to an existing project
 
-  $ webapp-extra ExtraName
+  $ webapp-extra --install PackageName 
 
 =head3 Start your application
 
@@ -436,23 +445,23 @@ security reasons, this file should always remain outside the I</htdocs> director
 Example:
 
   [project]
-  title              = Project                           # must not contain spaces or special characters
+  title              = Project                                 # must not contain spaces or special characters
   author             = Your Name Here
   email              = email@domain.com
   version            = 0.01
 
   [apache]
-  doc_root           = /var/www/project                  # path to project directory
-  domain             = www.domain.com                    # valid domain name
-  disable_uploads    = 0                                 # allow file uploads
-  post_max           = 5242880                           # post max in bytes (example 5MB)
+  doc_root           = /var/www/project                        # path to project directory
+  domain             = www.domain.com                          # valid domain name
+  disable_uploads    = 0                                       # allow file uploads
+  post_max           = 5242880                                 # post max in bytes (example 5MB)
   temp_dir           = /var/www/project/tmp/uploads
 
   [template]
-  cache_size         = 100                               # total files to store in cache
-  compile_dir        = /var/www/project/tmp/templates    # path to template cache
-  include_path       = /var/www/project/templates        # path to template directory
-  stat_ttl           = 60                                # template to HTML build time (in seconds)
+  cache_size         = 100                                     # total files to store in cache
+  compile_dir        = /var/www/project/tmp/cache/templates    # path to template cache
+  include_path       = /var/www/project/templates              # path to template directory
+  stat_ttl           = 60                                      # template to HTML build time (in seconds)
 
 H) Website sources.  This includes HTML, CSS, Javascript, and images.  When setting
 up FTP access - restrict access to this directory only.

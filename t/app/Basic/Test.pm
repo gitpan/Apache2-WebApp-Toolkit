@@ -3,6 +3,11 @@ package Basic::Test;
 use strict;
 use warnings FATAL => 'all';
 
+sub new {
+    my $class = shift;
+    return bless( {}, $class );
+}
+
 sub _default {
     my ( $self, $c ) = @_;
 

@@ -26,6 +26,7 @@ WriteMakefile(
         'Template'              => 0,
         'File::Copy::Recursive' => 0,
         'Params::Validate'      => 0,
+        'Test::More'            => 0,
     },
     EXE_FILES => [ qw(
                        bin/webapp-class

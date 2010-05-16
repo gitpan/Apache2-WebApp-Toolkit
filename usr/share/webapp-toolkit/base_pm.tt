@@ -6,6 +6,16 @@ use strict;
 our $VERSION = [% project_version || '0.01' %];
 
 #----------------------------------------------------------------------------+
+# _new(\%controller)
+#
+# General object constructor.
+
+sub _new {
+    my $class = shift;
+    return bless( {}, $class );
+}
+
+#----------------------------------------------------------------------------+
 # _global(\%controller)
 #
 # Add plugin global objects to the controller stash.
@@ -62,7 +72,13 @@ Common methods to be inherited by all classes.
 
 =head1 OBJECT METHODS
 
-=head2 global
+=head2 _new
+
+General object constructor.
+
+  [% project_title %]::Base->_new;
+
+=head2 _global
 
 Add plugin global objects to the controller stash.
 

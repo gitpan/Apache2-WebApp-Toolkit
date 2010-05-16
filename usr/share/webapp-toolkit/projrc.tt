@@ -2,6 +2,6 @@
 export PERL5LIB='[% apache_doc_root %]/app'
 
 # Helper aliases
-alias webapp-class='webapp-class --config [% apache_doc_root %]/conf/webapp.conf --name'
-alias webapp-extra='webapp-extra --config [% apache_doc_root %]/conf/webapp.conf --install'
+alias webapp-class='webapp-class --config [% apache_doc_root %]/conf/webapp.conf'
+alias webapp-extra='webapp-extra --config [% apache_doc_root %]/conf/webapp.conf'
 alias webapp-kickstart='webapp-kickstart --doc_root=[% apache_doc_root %]'
