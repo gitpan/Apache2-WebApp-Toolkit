@@ -123,7 +123,7 @@ WebApp::Helper::Kickstart - Start-up an Apache process to test your application.
 
       --verbose             Print messages to STDOUT
 
-Report bugs to <mbrooks\@cpan.org>.
+Report bugs to <mbrooks\@cpan.org>
 ERR_OUT
 
     exit;

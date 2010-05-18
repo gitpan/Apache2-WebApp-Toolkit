@@ -138,7 +138,7 @@ WebApp::Helper::Class - Add a new class or template to an existing project
       --help                List available command line options (this page)
       --verbose             Print messages to STDOUT
 
-Report bugs to <mbrooks\@cpan.org>.
+Report bugs to <mbrooks\@cpan.org>
 ERR_OUT
 
     exit;

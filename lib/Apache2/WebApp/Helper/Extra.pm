@@ -24,7 +24,7 @@ use File::Copy::Recursive qw( dircopy );
 use File::Path;
 use Getopt::Long qw( :config pass_through );
 
-our $VERSION = 0.06;
+our $VERSION = 0.07;
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~[  OBJECT METHODS  ]~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
@@ -60,7 +60,7 @@ sub process {
         $self->help;
     }
     elsif ( $opts{manifest} ) {
-        $self->manifest( "$source/extra/manifest/" . $opts{manifest} );
+        $self->manifest( "$source/extra/manifest/", $opts{manifest} );
     }
     else {
         my $config = $self->config->parse( $opts{config} );
@@ -177,15 +177,19 @@ sub process {
 # Command-line argument help menu.
 
 sub manifest {
-    my ( $self, $file) = @_;
+    my ( $self, $path, $file) = @_;
 
-    print "This package provides the following files:\n";
+    $file =~ s/(?:^|(?<=\_))(\w)/uc($1)/eg;
 
-    open (FILE, $file) or $self->error("Cannot open file: $!");
+    print "\033[33mThe package ($file) provides the following files\033[0m\n\n";
+
+    open (FILE, "$path/$file") or $self->error("Cannot open file: $!");
+
     while (<FILE>) {
         chomp;
         print " + $_\n";
     }
+
     close(FILE);
 
     exit;
@@ -218,7 +222,7 @@ WebApp::Helper::Extra - Add package sources to an existing project
       --help                List available command line options (this page)
       --verbose             Print messages to STDOUT
 
-Report bugs to <mbrooks\@cpan.org>.
+Report bugs to <mbrooks\@cpan.org>
 ERR_OUT
 
     exit;

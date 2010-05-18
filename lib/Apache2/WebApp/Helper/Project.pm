@@ -21,7 +21,7 @@ use base 'Apache2::WebApp::Helper';
 use File::Path;
 use Getopt::Long qw( :config pass_through );
 
-our $VERSION = 0.08;
+our $VERSION = 0.09;
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~[  OBJECT METHODS  ]~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
@@ -90,7 +90,6 @@ sub process {
     mkpath( "$doc_root/tmp/uploads",          $verbose );
 
     # File::Path ignores default 0777, use chmod instead
-    chmod 0777, "$doc_root/templates";
     chmod 0777, "$doc_root/tmp";
     chmod 0777, "$doc_root/tmp/cache";
     chmod 0777, "$doc_root/tmp/cache/templates";
@@ -158,7 +157,7 @@ WebApp::Helper::Project - Creates the necessary project files and directories
       --help                List available command line options (this page)
       --verbose             Print messages to STDOUT
 
-Report bugs to <mbrooks\@cpan.org>.
+Report bugs to <mbrooks\@cpan.org>
 ERR_OUT
 
     exit;
