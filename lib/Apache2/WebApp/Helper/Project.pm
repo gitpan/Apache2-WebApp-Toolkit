@@ -21,7 +21,7 @@ use base 'Apache2::WebApp::Helper';
 use File::Path;
 use Getopt::Long qw( :config pass_through );
 
-our $VERSION = 0.09;
+our $VERSION = 0.10;
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~[  OBJECT METHODS  ]~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
@@ -82,7 +82,7 @@ sub process {
     mkpath( "$doc_root/bin",                  $verbose, 0755 );
     mkpath( "$doc_root/conf",                 $verbose, 0755 );
     mkpath( "$doc_root/htdocs",               $verbose, 0755 );
-    mkpath( "$doc_root/logs",                 $verbose, 0700 );
+    mkpath( "$doc_root/logs",                 $verbose );
     mkpath( "$doc_root/templates",            $verbose );
     mkpath( "$doc_root/tmp",                  $verbose );
     mkpath( "$doc_root/tmp/cache",            $verbose );
@@ -90,6 +90,7 @@ sub process {
     mkpath( "$doc_root/tmp/uploads",          $verbose );
 
     # File::Path ignores default 0777, use chmod instead
+    chmod 0777, "$doc_root/logs";
     chmod 0777, "$doc_root/tmp";
     chmod 0777, "$doc_root/tmp/cache";
     chmod 0777, "$doc_root/tmp/cache/templates";
