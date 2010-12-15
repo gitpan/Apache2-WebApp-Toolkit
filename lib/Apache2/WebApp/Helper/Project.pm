@@ -21,7 +21,7 @@ use base 'Apache2::WebApp::Helper';
 use File::Path;
 use Getopt::Long qw( :config pass_through );
 
-our $VERSION = 0.10;
+our $VERSION = 0.11;
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~[  OBJECT METHODS  ]~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
@@ -70,11 +70,11 @@ sub process {
 
     print "Building the project...\n" if ($verbose);
 
-    $self->error("\033[31m--project_title of the same name already exists\033[0m")
-      if (-d $doc_root);
-
     $self->error("\033[31m--project_title must be alphanumeric with no spaces\033[0m")
       unless ($project =~ /^\w+?$/);
+
+    $self->error("\033[31m--apache_doc_root directory selected doesn't exist\033[0m")
+      unless (-d $doc_root);
 
     $doc_root =~ s/\/+$//g;
 
@@ -145,7 +145,7 @@ WebApp::Helper::Project - Creates the necessary project files and directories
 
       --config (default)    Instead of passing arguments, import these values from a file
 
-      --apache_doc_root     Absolute path to your project
+      --apache_doc_root     Absolute path to the project directory
       --apache_domain       Domain name for your project
 
       --project_title       Name of your project (example: Project)
@@ -194,7 +194,7 @@ Creates the necessary project files and directories.
 
         --config (default)    Instead of passing arguments, import these values from a file
 
-        --apache_doc_root     Absolute path to your project
+        --apache_doc_root     Absolute path to the project directory
         --apache_domain       Domain name for your project
 
         --project_title       Name of your project (example: Project)

@@ -24,7 +24,7 @@ use Params::Validate qw( :all );
 use Apache2::WebApp::AppConfig;
 use Apache2::WebApp::Template;
 
-our $VERSION = 0.03;
+our $VERSION = 0.04;
 our $AUTOLOAD;
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~[  OBJECT METHODS  ]~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
@@ -37,7 +37,7 @@ our $AUTOLOAD;
 sub new {
     my $class = shift;
 
-    my %config = ( template_include_path => '/usr/share/webapp-toolkit' );
+    my %config = ( template_include_path => get_source_path() );
 
     return bless( {
         CONFIG   => Apache2::WebApp::AppConfig->new,
@@ -97,6 +97,18 @@ sub error {
 }
 
 #----------------------------------------------------------------------------+
+# get_source_path()
+#
+# Returns the path to the /webapp-toolkit source directory.
+
+sub get_source_path {
+    my $self = shift;
+    my ( $package, $filename, $line ) = caller;
+    $filename =~ s/^(.*)\/lib\/.*$/$1/;
+    return $filename . '/share/webapp-toolkit';
+}
+
+#----------------------------------------------------------------------------+
 # AUTOLOAD()
 #
 # Provides pseudo-methods for read-only access to various internal methods.
@@ -147,6 +159,12 @@ Write the template output to a file.
 Print errors/exceptions to STDOUT and exit.
 
   $self->error($mesg);
+
+=head2 get_source_path
+
+Returns the path to the /webapp-toolkit source directory.
+
+  $self->get_source_path();
 
 =head1 EXAMPLES
 

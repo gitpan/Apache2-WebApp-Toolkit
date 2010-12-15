@@ -1,6 +1,6 @@
 #----------------------------------------------------------------------------+
 #
-#  Apache2::WebApp - A simplified web application framework
+#  Apache2::WebApp - Simplified web application framework
 #
 #  DESCRIPTION
 #  mod_perl request handler that provides URI to class/method dispatching.
@@ -27,7 +27,7 @@ use Apache2::Upload;
 use Apache2::Const qw( :common :http );
 use Apache2::Log;
 
-our $VERSION = 0.35;
+our $VERSION = 0.36;
 
 use Apache2::WebApp::AppConfig;
 use Apache2::WebApp::Plugin;
@@ -224,7 +224,7 @@ __END__
 
 =head1 NAME
 
-Apache2::WebApp - A simplified web application framework
+Apache2::WebApp - Simplified web application framework
 
 =head1 SYNOPSIS
 

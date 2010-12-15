@@ -24,7 +24,7 @@ use File::Copy::Recursive qw( dircopy );
 use File::Path;
 use Getopt::Long qw( :config pass_through );
 
-our $VERSION = 0.07;
+our $VERSION = 0.08;
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~[  OBJECT METHODS  ]~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
@@ -49,7 +49,7 @@ sub process {
         'verbose',
       );
 
-    my $source = ( $opts{source} ) ? $opts{source} : '/usr/share/webapp-toolkit';
+    my $source = ( $opts{source} ) ? $opts{source} : $self->get_source_path();
 
     if ( $opts{help}   ||
         !$opts{config} ||

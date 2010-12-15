@@ -50,7 +50,8 @@ sub _init {
         CACHE_SIZE   => $config->{template_cache_size} || 0,
         COMPILE_DIR  => $config->{template_compile_dir},
         INCLUDE_PATH => $config->{template_include_path},
-        STAT_TTL     => $config->{template_stat_ttl}
+        STAT_TTL     => $config->{template_stat_ttl},
+        ENCODING     => $config->{template_encoding}
       )
       or $self->error($Template::ERROR);
 }

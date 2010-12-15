@@ -19,6 +19,7 @@ cache_size         = 100                                        # total files to
 compile_dir        = [% apache_doc_root %]/tmp/cache/templates  # path to template cache
 include_path       = [% apache_doc_root %]/templates            # path to template directory
 stat_ttl           = 60                                         # template to HTML build time (in seconds)
+encoding           = utf8                                       # template output encoding
 
 [%- USE dir = Directory('/usr/share/webapp-toolkit/plugin/conf') -%]
 
