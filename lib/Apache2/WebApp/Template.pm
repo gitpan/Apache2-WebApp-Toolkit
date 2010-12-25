@@ -20,7 +20,7 @@ use warnings;
 use base 'Apache2::WebApp::Base';
 use Template;
 
-our $VERSION = 0.02;
+our $VERSION = 0.05;
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~[  OBJECT METHODS  ]~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
@@ -51,7 +51,8 @@ sub _init {
         COMPILE_DIR  => $config->{template_compile_dir},
         INCLUDE_PATH => $config->{template_include_path},
         STAT_TTL     => $config->{template_stat_ttl},
-        ENCODING     => $config->{template_encoding}
+        ENCODING     => $config->{template_encoding},
+        ABSOLUTE     => 1
       )
       or $self->error($Template::ERROR);
 }
@@ -85,6 +86,7 @@ options can be easily configured in your project I<webapp.conf>
   compile_dir  = /path/to/project/tmp/templates     # path to template cache
   include_path = /path/to/project/templates         # path to template directory
   stat_ttl     = 60                                 # template to HTML build time (in seconds)
+  encoding     = utf8                               # template output encoding
 
 =head3 METHOD
 

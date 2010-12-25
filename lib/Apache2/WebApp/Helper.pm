@@ -24,7 +24,7 @@ use Params::Validate qw( :all );
 use Apache2::WebApp::AppConfig;
 use Apache2::WebApp::Template;
 
-our $VERSION = 0.04;
+our $VERSION = 0.05;
 our $AUTOLOAD;
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~[  OBJECT METHODS  ]~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
@@ -36,12 +36,9 @@ our $AUTOLOAD;
 
 sub new {
     my $class = shift;
-
-    my %config = ( template_include_path => get_source_path() );
-
     return bless( {
         CONFIG   => Apache2::WebApp::AppConfig->new,
-        TEMPLATE => Apache2::WebApp::Template->new(\%config),
+        TEMPLATE => Apache2::WebApp::Template->new,
         VARS     => {},
     }, $class );
 }
@@ -75,9 +72,23 @@ sub write_file {
           );
 
     $self->{TEMPLATE}->process( $file, $self->{VARS}, $output )
-      or $self->error( $self->{TEMPLATE}->error() );
+      or $self->error(
+             "@{[ $self->{TEMPLATE}->error() ]} at $file"
+           );
 
     print "created file $output\n" if ( $self->{VERBOSE} );
+}
+
+#----------------------------------------------------------------------------+
+# get_source_path()
+#
+# Returns the path to the /webapp-toolkit source directory.
+
+sub get_source_path {
+    my $self = shift;
+    my ( $package, $filename, $line ) = caller;
+    $filename =~ s/^(.*)\/lib\/.*$/$1/;
+    return $filename . '/share/webapp-toolkit';
 }
 
 #----------------------------------------------------------------------------+
@@ -94,18 +105,6 @@ sub error {
 
     print "$mesg\n";
     exit;
-}
-
-#----------------------------------------------------------------------------+
-# get_source_path()
-#
-# Returns the path to the /webapp-toolkit source directory.
-
-sub get_source_path {
-    my $self = shift;
-    my ( $package, $filename, $line ) = caller;
-    $filename =~ s/^(.*)\/lib\/.*$/$1/;
-    return $filename . '/share/webapp-toolkit';
 }
 
 #----------------------------------------------------------------------------+
@@ -154,17 +153,17 @@ Write the template output to a file.
 
   $obj->write_file( $file, $output );
 
-=head2 error
-
-Print errors/exceptions to STDOUT and exit.
-
-  $self->error($mesg);
-
 =head2 get_source_path
 
 Returns the path to the /webapp-toolkit source directory.
 
   $self->get_source_path();
+
+=head2 error
+
+Print errors/exceptions to STDOUT and exit.
+
+  $self->error($mesg);
 
 =head1 EXAMPLES
 
@@ -191,7 +190,7 @@ Returns the path to the /webapp-toolkit source directory.
 
   # program continues...
 
-  $obj->write_file('infile.tt','/path/to/outfile.txt');
+  $obj->write_file('/path/to/infile.tt','/path/to/outfile.txt');
 
 =head3 TEMPLATE
 

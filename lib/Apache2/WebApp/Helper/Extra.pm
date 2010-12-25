@@ -49,10 +49,10 @@ sub process {
         'verbose',
       );
 
-    my $source = ( $opts{source} ) ? $opts{source} : $self->get_source_path();
+    my $source = $opts{source} ||= $self->get_source_path();
 
-    if ( $opts{help}   ||
-        !$opts{config} ||
+    if ( $opts{help}    ||
+        !$opts{config}  ||
        (!$opts{install} && !$opts{manifest}) ) {
 
         print "\033[33mMissing or invalid options\033[0m\n\n";
@@ -150,7 +150,7 @@ sub process {
         $self->error("\033[31m--install already exists.  Must use --force to install\033[0m")
           if (-e $class && !$force);
 
-        $self->write_file( "extra/class/$file\.tt", $class );
+        $self->write_file( "$source/extra/class/$file\.tt", $class );
     }
 
     close(FILE);

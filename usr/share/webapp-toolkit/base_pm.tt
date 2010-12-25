@@ -23,10 +23,10 @@ sub _new {
 sub _global {
     my ( $self, $c ) = @_;
 
-[%- USE dir = Directory('/usr/share/webapp-toolkit/plugin/base') -%]
+[%- USE dir = Directory("$source/plugin/base") -%]
 
 [%- FOREACH file = dir.files %]
-[%  PROCESS "plugin/base/$file.name" %]
+[%  PROCESS "$source/plugin/base/$file.name" %]
 [%- END -%]
 
     return $c;

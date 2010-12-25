@@ -27,7 +27,7 @@ use Apache2::Upload;
 use Apache2::Const qw( :common :http );
 use Apache2::Log;
 
-our $VERSION = 0.36;
+our $VERSION = 0.38;
 
 use Apache2::WebApp::AppConfig;
 use Apache2::WebApp::Plugin;
@@ -462,6 +462,7 @@ Example:
   compile_dir        = /var/www/project/tmp/cache/templates    # path to template cache
   include_path       = /var/www/project/templates              # path to template directory
   stat_ttl           = 60                                      # template to HTML build time (in seconds)
+  encoding           = utf8                                    # template output encoding
 
 H) Website sources.  This includes HTML, CSS, Javascript, and images.  When setting
 up FTP access - restrict access to this directory only.

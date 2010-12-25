@@ -233,6 +233,7 @@ GETTING STARTED
       compile_dir        = /var/www/project/tmp/cache/templates    # path to template cache
       include_path       = /var/www/project/templates              # path to template directory
       stat_ttl           = 60                                      # template to HTML build time (in seconds)
+      encoding           = utf8                                    # template output encoding
 
     H) Website sources. This includes HTML, CSS, Javascript, and images.
     When setting up FTP access - restrict access to this directory only.

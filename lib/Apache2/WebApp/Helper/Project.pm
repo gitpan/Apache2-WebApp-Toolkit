@@ -21,7 +21,7 @@ use base 'Apache2::WebApp::Helper';
 use File::Path;
 use Getopt::Long qw( :config pass_through );
 
-our $VERSION = 0.11;
+our $VERSION = 0.12;
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~[  OBJECT METHODS  ]~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
@@ -44,6 +44,7 @@ sub process {
         'project_email=s',
         'project_version=s',
         'config=s',
+        'source=s',
         'rewrite_uri',
         'help',
         'verbose',
@@ -66,6 +67,7 @@ sub process {
 
     my $project  = $opts{project_title};
     my $doc_root = $opts{apache_doc_root};
+    my $source   = $opts{source} ||= $self->get_source_path();
     my $verbose  = $opts{verbose};
 
     print "Building the project...\n" if ($verbose);
@@ -75,6 +77,9 @@ sub process {
 
     $self->error("\033[31m--apache_doc_root directory selected doesn't exist\033[0m")
       unless (-d $doc_root);
+
+    $self->error("\033[31m--source directory selected does not exist\033[0m")
+      unless (-d $source);
 
     $doc_root =~ s/\/+$//g;
 
@@ -111,16 +116,16 @@ sub process {
         example_uri   => 'app/example',
       });
 
-    $self->write_file( 'class_pm.tt',    "$doc_root/app/$project/Example.pm" );
-    $self->write_file( 'base_pm.tt',     "$doc_root/app/$project/Base.pm"    );
-    $self->write_file( 'startup_pl.tt',  "$doc_root/bin/startup.pl"          );
-    $self->write_file( 'htpasswd.tt',    "$doc_root/conf/htpasswd"           );
-    $self->write_file( 'webapp_conf.tt', "$doc_root/conf/webapp.conf"        );
-    $self->write_file( 'httpd_conf.tt',  "$doc_root/conf/httpd.conf"         );
-    $self->write_file( 'index_html.tt',  "$doc_root/htdocs/index.html"       );
-    $self->write_file( 'projrc.tt',      "$doc_root/.projrc"                 );
-    $self->write_file( 'template.tt',    "$doc_root/templates/example.tt"    );
-    $self->write_file( 'error.tt',       "$doc_root/templates/error.tt"      );
+    $self->write_file( "$source/class_pm.tt",    "$doc_root/app/$project/Example.pm" );
+    $self->write_file( "$source/base_pm.tt",     "$doc_root/app/$project/Base.pm"    );
+    $self->write_file( "$source/startup_pl.tt",  "$doc_root/bin/startup.pl"          );
+    $self->write_file( "$source/htpasswd.tt",    "$doc_root/conf/htpasswd"           );
+    $self->write_file( "$source/webapp_conf.tt", "$doc_root/conf/webapp.conf"        );
+    $self->write_file( "$source/httpd_conf.tt",  "$doc_root/conf/httpd.conf"         );
+    $self->write_file( "$source/index_html.tt",  "$doc_root/htdocs/index.html"       );
+    $self->write_file( "$source/projrc.tt",      "$doc_root/.projrc"                 );
+    $self->write_file( "$source/template.tt",    "$doc_root/templates/example.tt"    );
+    $self->write_file( "$source/error.tt",       "$doc_root/templates/error.tt"      );
 
     chmod 0666, "$doc_root/conf/htpasswd";
 
@@ -152,6 +157,8 @@ WebApp::Helper::Project - Creates the necessary project files and directories
       --project_author      Full name of the project owner
       --project_email       E-mail address of the project owner
       --project_version     Version number of your project
+
+      --source              Specify a custom source directory (default: /usr/share/webapp-toolkit)
 
       --rewrite_uri         Remove the project name from the URI (requires mod_rewrite)
 
@@ -201,6 +208,8 @@ Creates the necessary project files and directories.
         --project_author      Full name of the project owner
         --project_email       E-mail address of the project owner
         --project_version     Version number of your project
+
+        --source              Specify a custom source directory (default: /usr/share/webapp-toolkit)
 
         --rewrite_uri         Remove the project name from the URI (requires mod_rewrite)
 
