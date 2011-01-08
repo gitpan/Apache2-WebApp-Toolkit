@@ -24,7 +24,7 @@ use Params::Validate qw( :all );
 use Apache2::WebApp::AppConfig;
 use Apache2::WebApp::Template;
 
-our $VERSION = 0.05;
+our $VERSION = 0.06;
 our $AUTOLOAD;
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~[  OBJECT METHODS  ]~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
@@ -85,7 +85,11 @@ sub write_file {
 # Returns the path to the /webapp-toolkit source directory.
 
 sub get_source_path {
-    my $self = shift;
+    my $self
+      = validate_pos( @_,
+          { type => OBJECT }
+          );
+
     my ( $package, $filename, $line ) = caller;
     $filename =~ s/^(.*)\/lib\/.*$/$1/;
     return $filename . '/share/webapp-toolkit';
@@ -216,6 +220,6 @@ Marc S. Brooks, E<lt>mbrooks@cpan.orgE<gt> L<http://mbrooks.info>
 This program is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.
 
-See L<http://www.perl.com/perl/misc/Artistic.html>
+See L<http://dev.perl.org/licenses/artistic.html>
 
 =cut

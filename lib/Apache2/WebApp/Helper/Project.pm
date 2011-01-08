@@ -21,7 +21,7 @@ use base 'Apache2::WebApp::Helper';
 use File::Path;
 use Getopt::Long qw( :config pass_through );
 
-our $VERSION = 0.12;
+our $VERSION = 0.13;
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~[  OBJECT METHODS  ]~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
@@ -77,6 +77,9 @@ sub process {
 
     $self->error("\033[31m--apache_doc_root directory selected doesn't exist\033[0m")
       unless (-d $doc_root);
+
+    $self->error("\033[31m--apache_doc_root directory selected must be empty\033[0m")
+      if (scalar <$doc_root/*>);
 
     $self->error("\033[31m--source directory selected does not exist\033[0m")
       unless (-d $source);
@@ -229,6 +232,6 @@ Marc S. Brooks, E<lt>mbrooks@cpan.orgE<gt> - L<http://mbrooks.info>
 This program is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.
 
-See L<http://www.perl.com/perl/misc/Artistic.html>
+See L<http://dev.perl.org/licenses/artistic.html>
 
 =cut

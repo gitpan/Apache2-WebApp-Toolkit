@@ -1,10 +1,10 @@
 --- #YAML:1.0
 name: Apache2::WebApp::Toolkit
 abstract: Simplified web application framework
-version: 0.37
+version: 0.38
 author:
   - Marc S. Brooks <mbrooks@cpan.org>
-license: perl and artistic
+license: perl
 distribution_type: module
 requires:
   Apache2::Request: 0
