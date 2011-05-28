@@ -60,7 +60,7 @@ sub process {
         $self->help;
     }
     elsif ( $opts{manifest} ) {
-        $self->manifest( "$source/extra/manifest/", $opts{manifest} );
+        $self->manifest("$source/extra/manifest/", $opts{manifest} );
     }
     else {
         my $config = $self->config->parse( $opts{config} );
@@ -111,14 +111,14 @@ sub process {
 
     # copy the website sources
     if (-e $ht_src) {
-        mkpath(  $ht_dir, $verbose, 0755 );
-        dircopy( $ht_src, $ht_dir ) or die $!;
+        mkpath($ht_dir, $verbose, 0755);
+        dircopy($ht_src, $ht_dir) or die $!;
     }
 
     # copy the templates
     if (-e $tt_src) {
-        mkpath(  $tt_dir, $verbose, 0777 );
-        dircopy( $tt_src, $tt_dir ) or die $!;
+        mkpath($tt_dir, $verbose, 0777);
+        dircopy($tt_src, $tt_dir) or die $!;
     }
 
     $self->set_vars(\%opts);
@@ -150,7 +150,7 @@ sub process {
         $self->error("\033[31m--install already exists.  Must use --force to install\033[0m")
           if (-e $class && !$force);
 
-        $self->write_file( "$source/extra/class/$file\.tt", $class );
+        $self->write_file("$source/extra/class/$file\.tt", $class);
     }
 
     close(FILE);
@@ -177,19 +177,17 @@ sub process {
 # Command-line argument help menu.
 
 sub manifest {
-    my ( $self, $path, $file) = @_;
+    my ($self, $path, $file) = @_;
 
     $file =~ s/(?:^|(?<=\_))(\w)/uc($1)/eg;
 
     print "\033[33mThe package ($file) provides the following files\033[0m\n\n";
 
     open (FILE, "$path/$file") or $self->error("Cannot open file: $!");
-
     while (<FILE>) {
         chomp;
         print " + $_\n";
     }
-
     close(FILE);
 
     exit;

@@ -1,7 +1,7 @@
 package [% project_title %]::Base;
 
 use strict;
-#use warnings;     # debug
+use warnings;
 
 our $VERSION = [% project_version || '0.01' %];
 
@@ -12,7 +12,7 @@ our $VERSION = [% project_version || '0.01' %];
 
 sub _new {
     my $class = shift;
-    return bless( {}, $class );
+    return bless({}, $class);
 }
 
 #----------------------------------------------------------------------------+
@@ -21,7 +21,7 @@ sub _new {
 # Add plugin global objects to the controller stash.
 
 sub _global {
-    my ( $self, $c ) = @_;
+    my ($self, $c) = @_;
 
 [%- USE dir = Directory("$source/plugin/base") -%]
 
@@ -38,7 +38,7 @@ sub _global {
 # Output a template based error message.
 
 sub _error {
-    my ( $self, $c, $title, $value ) = @_;
+    my ($self, $c, $title, $value) = @_;
 
     $c->request->content_type('text/html');
 
@@ -84,7 +84,7 @@ Add plugin global objects to the controller stash.
 
   $self->_global(\%controller)
 
-=head2 error
+=head2 _error
 
 Output a template based error messages.
 

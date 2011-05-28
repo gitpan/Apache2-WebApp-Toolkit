@@ -20,23 +20,23 @@ use warnings;
 use base 'Apache2::WebApp::Base';
 use Params::Validate qw( :all );
 
-our $VERSION = 0.01;
+our $VERSION = 0.02;
 our $AUTOLOAD;
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~[  OBJECT METHODS  ]~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
 #----------------------------------------------------------------------------+
-# set( $name, \%vars )
+# set($name, \%vars)
 #
 # Set the object attribute.  Return a reference to this object.
 
 sub set {
-    my ( $self, $name, $vars )
-      = validate_pos( @_,
+    my ($self, $name, $vars)
+      = validate_pos(@_,
           { type => OBJECT },
           { type => SCALAR },
           { type => ARRAYREF | HASHREF | SCALAR | UNDEF }
-          );
+      );
 
     $self->{ uc($name) } = $vars;
     return $self->{ uc($name) };
@@ -48,11 +48,11 @@ sub set {
 # Get the object attribute.  Return a reference to this object.
 
 sub get {
-    my ( $self, $name )
-      = validate_pos( @_,
+    my ($self, $name)
+      = validate_pos(@_,
           { type => OBJECT },
           { type => SCALAR }
-          );
+      );
 
     return $self->{ uc($name) };
 }
@@ -83,11 +83,11 @@ Apache2::WebApp::Stash - Object that contains stored variables
   my %vars = (
       foo => 'bar',
       baz => qw( bucket1 bucket2 bucket3 ),
-      qux => qw{
-                 key1 => 'value1',
-                 key2 => 'value2',
-                 ...
-               },
+      qux => {
+          key1 => 'value1',
+          key2 => 'value2',
+          ...
+      },
       ...
     );
 

@@ -33,9 +33,9 @@ our $VERSION = 0.02;
 sub new {
     my $class  = shift;
     my $params = (ref $_[0] eq 'HASH') ? shift : { @_ };
-    my $self   = bless( {
+    my $self   = bless({
         DEBUG => $params->{debug},
-    }, $class );
+    }, $class);
     return ( $self->_init($params) ) ? $self : $class->error;
 }
 
@@ -57,16 +57,14 @@ sub version {
 # Output errors/exceptions and exit.
 
 sub error {
-    my ( $self, $mesg )
-      = validate_pos( @_,
+    my ($self, $mesg)
+      = validate_pos(@_,
           { type => OBJECT },
           { type => SCALAR, optional => 1 }
-          );
+      );
 
     my $class = ref $self || $self;
-
     $mesg ||= "Failed to initialize object";
-
     my $error = "[$class] $mesg";
 
     if ( $self->{DEBUG} ) { confess $error } else { die $error }
@@ -94,7 +92,7 @@ Apache2::WebApp::Base - Base class implementing common functionality
 
 =head1 SYNOPSIS
 
-  use base qw( Apache2::WebApp::Base );
+  use base 'Apache2::WebApp::Base';
 
 =head1 DESCRIPTION
 

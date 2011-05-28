@@ -31,11 +31,11 @@ our $AUTOLOAD;
 # Include the class (plugin('class')) if it hasn't already been included.
 
 sub load {
-    my ( $self, $name )
-      = validate_pos( @_,
+    my ($self, $name)
+      = validate_pos(@_,
           { type => OBJECT },
           { type => SCALAR }
-          );
+      );
 
     $name =~ s/\b(\w)/\u$1/g;
 

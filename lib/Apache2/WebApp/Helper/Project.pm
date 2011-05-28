@@ -86,16 +86,16 @@ sub process {
 
     $doc_root =~ s/\/+$//g;
 
-    mkpath( "$doc_root/app",                  $verbose, 0755 );
-    mkpath( "$doc_root/bin",                  $verbose, 0755 );
-    mkpath( "$doc_root/conf",                 $verbose, 0755 );
-    mkpath( "$doc_root/htdocs",               $verbose, 0755 );
-    mkpath( "$doc_root/logs",                 $verbose );
-    mkpath( "$doc_root/templates",            $verbose );
-    mkpath( "$doc_root/tmp",                  $verbose );
-    mkpath( "$doc_root/tmp/cache",            $verbose );
-    mkpath( "$doc_root/tmp/cache/templates",  $verbose );
-    mkpath( "$doc_root/tmp/uploads",          $verbose );
+    mkpath("$doc_root/app",                  $verbose, 0755);
+    mkpath("$doc_root/bin",                  $verbose, 0755);
+    mkpath("$doc_root/conf",                 $verbose, 0755);
+    mkpath("$doc_root/htdocs",               $verbose, 0755);
+    mkpath("$doc_root/logs",                 $verbose);
+    mkpath("$doc_root/templates",            $verbose);
+    mkpath("$doc_root/tmp",                  $verbose);
+    mkpath("$doc_root/tmp/cache",            $verbose);
+    mkpath("$doc_root/tmp/cache/templates",  $verbose);
+    mkpath("$doc_root/tmp/uploads",          $verbose);
 
     # File::Path ignores default 0777, use chmod instead
     chmod 0777, "$doc_root/logs";
@@ -104,9 +104,9 @@ sub process {
     chmod 0777, "$doc_root/tmp/cache/templates";
     chmod 0777, "$doc_root/tmp/uploads";
 
-    open (FILE1, ">$doc_root/logs/access_log"    ) or $self->error("Cannot open file: $!");  close(FILE1);
-    open (FILE2, ">$doc_root/logs/error_log"     ) or $self->error("Cannot open file: $!");  close(FILE2);
-    open (FILE3, ">$doc_root/htdocs/favicon.ico" ) or $self->error("Cannot open file: $!");  close(FILE3);
+    open (FILE1, ">$doc_root/logs/access_log"   ) or $self->error("Cannot open file: $!"); close(FILE1);
+    open (FILE2, ">$doc_root/logs/error_log"    ) or $self->error("Cannot open file: $!"); close(FILE2);
+    open (FILE3, ">$doc_root/htdocs/favicon.ico") or $self->error("Cannot open file: $!"); close(FILE3);
 
     print "created $doc_root/logs/access_log\n"    if ($verbose);
     print "created $doc_root/logs/error_log\n"     if ($verbose);
@@ -119,16 +119,16 @@ sub process {
         example_uri   => 'app/example',
       });
 
-    $self->write_file( "$source/class_pm.tt",    "$doc_root/app/$project/Example.pm" );
-    $self->write_file( "$source/base_pm.tt",     "$doc_root/app/$project/Base.pm"    );
-    $self->write_file( "$source/startup_pl.tt",  "$doc_root/bin/startup.pl"          );
-    $self->write_file( "$source/htpasswd.tt",    "$doc_root/conf/htpasswd"           );
-    $self->write_file( "$source/webapp_conf.tt", "$doc_root/conf/webapp.conf"        );
-    $self->write_file( "$source/httpd_conf.tt",  "$doc_root/conf/httpd.conf"         );
-    $self->write_file( "$source/index_html.tt",  "$doc_root/htdocs/index.html"       );
-    $self->write_file( "$source/projrc.tt",      "$doc_root/.projrc"                 );
-    $self->write_file( "$source/template.tt",    "$doc_root/templates/example.tt"    );
-    $self->write_file( "$source/error.tt",       "$doc_root/templates/error.tt"      );
+    $self->write_file("$source/class_pm.tt",    "$doc_root/app/$project/Example.pm");
+    $self->write_file("$source/base_pm.tt",     "$doc_root/app/$project/Base.pm"   );
+    $self->write_file("$source/startup_pl.tt",  "$doc_root/bin/startup.pl"         );
+    $self->write_file("$source/htpasswd.tt",    "$doc_root/conf/htpasswd"          );
+    $self->write_file("$source/webapp_conf.tt", "$doc_root/conf/webapp.conf"       );
+    $self->write_file("$source/httpd_conf.tt",  "$doc_root/conf/httpd.conf"        );
+    $self->write_file("$source/index_html.tt",  "$doc_root/htdocs/index.html"      );
+    $self->write_file("$source/projrc.tt",      "$doc_root/.projrc"                );
+    $self->write_file("$source/template.tt",    "$doc_root/templates/example.tt"   );
+    $self->write_file("$source/error.tt",       "$doc_root/templates/error.tt"     );
 
     chmod 0666, "$doc_root/conf/htpasswd";
 

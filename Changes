@@ -7,3 +7,9 @@ Revision history for Perl module Apache2::WebApp::Toolkit
     - Updated license field in META.yml to fix 'License Unknown' issue on CPAN
     - Updated PREREQ_PM module versions in Makefile.PL
     - Updated module versions in META.yml requires field.
+
+0.39
+    - Updated optional $class (in WebApp.pm) to return a blessed OBJECT by default.
+    - Added missing packages to 001_load.t test script.
+    - Minor POD updates and additions.
+    - Spring cleaning.

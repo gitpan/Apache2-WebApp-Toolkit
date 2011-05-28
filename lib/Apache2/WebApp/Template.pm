@@ -32,7 +32,7 @@ our $VERSION = 0.05;
 sub new {
     my $class  = shift;
     my $config = (ref $_[0] eq 'HASH') ? shift : { @_ };
-    my $self   = bless( {}, $class );
+    my $self   = bless({}, $class);
     return $self->_init($config) || $class->error;
 }
 
@@ -44,10 +44,9 @@ sub new {
 # Return to the caller a new template object. 
 
 sub _init {
-    my ( $self, $config ) = @_;
-
+    my ($self, $config) = @_;
     return Template->new(
-        CACHE_SIZE   => $config->{template_cache_size} || 0,
+        CACHE_SIZE   => $config->{template_cache_size}   || 0,
         COMPILE_DIR  => $config->{template_compile_dir},
         INCLUDE_PATH => $config->{template_include_path},
         STAT_TTL     => $config->{template_stat_ttl},
@@ -91,7 +90,7 @@ options can be easily configured in your project I<webapp.conf>
 =head3 METHOD
 
   sub _default {
-      my ( $self, $c ) @_;
+      my ($self, $c) @_;
 
       $c->request->content_type('text/html');
 
@@ -99,15 +98,15 @@ options can be easily configured in your project I<webapp.conf>
           'file.tt', {
               foo => 'bar',
               baz => qw( bucket1 bucket2 bucket3 ),
-              qux => qw{
-                         key1 => 'value1',
-                         key2 => 'value2',
-                          ...
-                     },
+              qux => {
+                  key1 => 'value1',
+                  key2 => 'value2',
+                  ...
+              },
               ...
           }
         )
-        or $self->_error( $c, 'Template process failed', $c->template->error() );
+        or $self->_error($c, 'Template process failed', $c->template->error() );
 
       exit;
   }

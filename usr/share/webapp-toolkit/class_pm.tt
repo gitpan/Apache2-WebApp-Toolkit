@@ -1,19 +1,16 @@
 package [% package_name %];
 
 use strict;
-#use warnings;     # debug
+use warnings;
+use base '[% project_title %]::Base';
 
 our $VERSION = [% project_version || '0.01' %];
-
-use base qw(
-  [% project_title %]::Base
-  );
 
 #----------------------------------------------------------------------------+
 # _default(\%controller)
 
 sub _default {
-    my ( $self, $c ) = @_;
+    my ($self, $c) = @_;
 
     $c->request->content_type('text/html');
 

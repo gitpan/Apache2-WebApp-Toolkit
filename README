@@ -51,12 +51,12 @@ DESCRIPTION
       # construct as an object (optional)
       sub new {
           my $class = shift;
-          return bless( {}, $class );
+          return bless({}, $class);
       }
 
       # this method is executed for every request (optional)
       sub _global {
-          my ( $self, $c ) = @_;
+          my ($self, $c) = @_;
 
           $c->stash('baz','qux');
 
@@ -65,14 +65,14 @@ DESCRIPTION
 
       # if the target method doesn't exist, this will be executed
       sub _default {
-          my ( $self, $c ) = @_;
+          my ($self, $c) = @_;
 
-          $self->_print_result( $c, 'bar' );
+          $self->_print_result($c, 'bar');
       }
 
       # _ always denotes a private method (not URI accessible)
       sub _print_result {
-          my ( $self, $c, $output ) = @_;
+          my ($self, $c, $output) = @_;
 
           $c->request->content_type('text/html');
 
@@ -82,9 +82,9 @@ DESCRIPTION
 
       # /app/project/foo/bar --> maps to Project::Foo->bar()
       sub bar {
-          my ( $self, $c ) = @_;
+          my ($self, $c) = @_;
 
-          $self->_print_result( $c, $c->stash('baz') );     # output 'qux'
+          $self->_print_result($c, $c->stash('baz') );     # output 'qux'
       }
 
       1;
@@ -170,9 +170,7 @@ GETTING STARTED
 
     Example:
 
-      use base qw(
-          Project::Base
-        );
+      use base 'Project::Base';
 
     C) Basic class.
 
@@ -193,6 +191,7 @@ GETTING STARTED
       # Modules added here will be URI accessible 
       __DATA__ 
       Project::Foo
+      Project::Foo::Bar
 
     E) Password file used for restricting access to a specified path (see
     "httpd.conf").
@@ -249,7 +248,7 @@ GETTING STARTED
     L) Temporary shared space for file processing.
 
 CAVEATS
-    Since your classes get compiled at Apache start-up, the server must be
+    Since your classes get compiled at Apache start-up the server must be
     restarted when any code changes take place. You can do this easily using
     the "webapp-kickstart" script provided with this package.
 

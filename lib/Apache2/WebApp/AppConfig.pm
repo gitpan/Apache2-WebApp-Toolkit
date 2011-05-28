@@ -31,11 +31,11 @@ our $VERSION = 0.01;
 # Return the configuration name/value pairs as a reference to a hash.
 
 sub parse {
-    my ( $self, $file )
-      = validate_pos( @_,
+    my ($self, $file)
+      = validate_pos(@_,
           { type => OBJECT },
           { type => SCALAR }
-          );
+      );
 
     my $config;
 
@@ -48,7 +48,6 @@ sub parse {
                 },
             }
           );
-
         $config->file($file);
       };
 
@@ -71,7 +70,7 @@ Apache2::WebApp::AppConfig - AppConfig extension for parsing config files
 
   $c->config->parse('/path/to/file.cfg');
 
-  print $c->config->{$key};
+  print $c->config->{$key}, "\n";    # key = value format
 
 =head1 DESCRIPTION
 

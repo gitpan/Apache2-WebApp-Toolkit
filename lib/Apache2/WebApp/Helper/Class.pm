@@ -100,8 +100,8 @@ sub process {
         template_name => ( $opts{template} ) ? $template : undef,
       });
 
-    $self->write_file( 'class_pm.tt', "$app_path/$class\.pm"              );
-    $self->write_file( 'template.tt', "$doc_root/templates/$template\.tt" )
+    $self->write_file('class_pm.tt', "$app_path/$class\.pm"             );
+    $self->write_file('template.tt', "$doc_root/templates/$template\.tt")
       if ( $opts{template} );
 
     print "\033[33mClass '$class' created successfully\033[0m\n";

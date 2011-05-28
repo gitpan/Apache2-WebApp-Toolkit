@@ -36,11 +36,11 @@ our $AUTOLOAD;
 
 sub new {
     my $class = shift;
-    return bless( {
+    return bless({
         CONFIG   => Apache2::WebApp::AppConfig->new,
         TEMPLATE => Apache2::WebApp::Template->new,
         VARS     => {},
-    }, $class );
+    }, $class);
 }
 
 #----------------------------------------------------------------------------+
@@ -49,11 +49,11 @@ sub new {
 # Set the template object attributes.
 
 sub set_vars {
-    my ( $self, $vars )
-      = validate_pos( @_,
+    my ($self, $vars)
+      = validate_pos(@_,
           { type => OBJECT  },
           { type => HASHREF }
-          );
+      );
 
     @{ $self->{VARS} }{keys %$vars} = values %$vars;
 }
@@ -64,17 +64,17 @@ sub set_vars {
 # Write the template output to a file.
 
 sub write_file {
-    my ( $self, $file, $output )
-      = validate_pos( @_,
+    my ($self, $file, $output)
+      = validate_pos(@_,
           { type => OBJECT },
           { type => SCALAR },
           { type => SCALAR }
-          );
+      );
 
-    $self->{TEMPLATE}->process( $file, $self->{VARS}, $output )
+    $self->{TEMPLATE}->process($file, $self->{VARS}, $output)
       or $self->error(
-             "@{[ $self->{TEMPLATE}->error() ]} at $file"
-           );
+          "@{[ $self->{TEMPLATE}->error() ]} at $file"
+        );
 
     print "created file $output\n" if ( $self->{VERBOSE} );
 }
@@ -86,11 +86,11 @@ sub write_file {
 
 sub get_source_path {
     my $self
-      = validate_pos( @_,
+      = validate_pos(@_,
           { type => OBJECT }
-          );
+      );
 
-    my ( $package, $filename, $line ) = caller;
+    my ($package, $filename, $line) = caller;
     $filename =~ s/^(.*)\/lib\/.*$/$1/;
     return $filename . '/share/webapp-toolkit';
 }
@@ -101,11 +101,11 @@ sub get_source_path {
 # Print errors/exceptions to STDOUT and exit.
 
 sub error {
-    my ( $self, $mesg )
-      = validate_pos( @_,
+    my ($self, $mesg)
+      = validate_pos(@_,
           { type => OBJECT },
           { type => SCALAR }
-          );
+      );
 
     print "$mesg\n";
     exit;
@@ -155,7 +155,7 @@ Set the template object attributes.
 
 Write the template output to a file.
 
-  $obj->write_file( $file, $output );
+  $obj->write_file($file, $output);
 
 =head2 get_source_path
 

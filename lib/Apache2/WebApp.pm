@@ -18,7 +18,7 @@ package Apache2::WebApp;
 use strict;
 use warnings;
 no  warnings qw( uninitialized );
-use base qw( Apache2::WebApp::Base );
+use base 'Apache2::WebApp::Base';
 use Apache2::Request;
 use Apache2::RequestRec;
 use Apache2::RequestUtil;
@@ -27,7 +27,7 @@ use Apache2::Upload;
 use Apache2::Const qw( :common :http );
 use Apache2::Log;
 
-our $VERSION = 0.38;
+our $VERSION = 0.39;
 
 use Apache2::WebApp::AppConfig;
 use Apache2::WebApp::Plugin;
@@ -42,13 +42,13 @@ use Apache2::WebApp::Template;
 # mod_perl handler - Instanciate Apache2::WebApp::Toolkit objects.
 
 sub handler : method {
-    my ( $self, $r ) = @_;
+    my ($self, $r) = @_;
 
     my $config = Apache2::WebApp::AppConfig->new;
 
     $self->{CONFIG} = $config->parse( $ENV{'WEBAPP_CONF'} );
 
-    $self->{REQUEST} = Apache2::Request->new( $r,
+    $self->{REQUEST} = Apache2::Request->new($r,
         DISABLE_UPLOADS => $self->{CONFIG}->{apache_disable_uploads},
         POST_MAX        => $self->{CONFIG}->{apache_post_max},
         TEMP_DIR        => $self->{CONFIG}->{apache_temp_dir}
@@ -97,20 +97,20 @@ sub template {
 # Return a reference to the new Apache2::WebApp::Plugin object.
 
 sub plugin {
-    my ( $self, $name ) = @_;
+    my ($self, $name) = @_;
     $self->{PLUGIN}->{ uc($name) } = $self->{PLUGIN}->load($name);
     return $self->{PLUGIN}->{ uc($name) };
 }
 
 #----------------------------------------------------------------------------+
-# stash( $name, \%object )
+# stash($name, \%object)
 #
 # Return a reference to the new Apache2::WebApp::Stash object.
 
 sub stash {
-    my ( $self, $name, $object ) = @_;
-    if ($object) {
-        $self->{STASH}->{ uc($name) } = $self->{STASH}->set( $name, $object );
+    my ($self, $name, $obj) = @_;
+    if ($obj) {
+        $self->{STASH}->{ uc($name) } = $self->{STASH}->set($name, $obj);
     }
     else {
         $self->{STASH}->{ uc($name) } = $self->{STASH}->get($name);
@@ -122,23 +122,24 @@ sub stash {
 #~~~~~~~~~~~~~~~~~~~~~~~~~~[  PRIVATE METHODS  ]~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
 #----------------------------------------------------------------------------+
-# dispatch
+# dispatch()
 #
-# Translate the $r->uri to class/method.
+# Translate the $r->uri to class/method and execute.
 
 sub dispatch {
     my $self = shift;
 
-    my $uri = substr( $self->request->uri, length($self->request->location) + 1 );
+    my $uri
+      = substr($self->request->uri, length($self->request->location) + 1);
 
-    unless ( $uri =~ /\A (\w+\/)*\w+ /xs ) {
+    unless ($uri =~ /\A (\w+\/)*\w+ /xs) {
         $self->error("Malformed URI request");
         return HTTP_BAD_REQUEST;
     }
 
     $uri =~ s/\/+$//g;
 
-    my ( $module, $method );
+    my ($module, $method);
 
     unless ( $module = $self->module_exists($uri) ) {
         $method = $uri;
@@ -156,17 +157,23 @@ sub dispatch {
 
     unless ( $module->can('isa') ) {
         eval "require $module";
-
         $self->error("Failed to load class '$module': $@") if $@;
+        return DECLINED;   
     }
 
-    my $class = ( $module->can('_new') ) ? $module->_new : $module;
+    my $class = ( $module->can('_new') )
+        ? $module->_new
+        : bless ({}, $module)
+      ;
 
-    my $c = ( $module->can('_global') ) ? $module->_global($self) : $self;
+    my $c = ( $module->can('_global') )
+        ? $module->_global($self)
+        : $self
+      ;
 
     if ($method) {
         if ($method =~ /^\_/) {
-            $self->error("The method ($method) cannot contain a leading underscore");
+            $self->error("The method ($method) contains a leading underscore");
             return HTTP_BAD_REQUEST;
         }
 
@@ -188,20 +195,19 @@ sub dispatch {
         }
     }
 
-    exit;
+    return OK;
 }
 
 #----------------------------------------------------------------------------+
 # module_exists($file)
 #
-# Search %INC for the selected module, return filename if exists.
+# Search %INC for the selected module; return filename if exists.
 
 sub module_exists {
-    my ( $self, $file ) = @_;
+    my ($self, $file) = @_;
     return unless $file;
 
     my $project = $self->config->{project_title};
-
     foreach (sort keys %INC) {
         return $_ if (/\A $project\/$file\.pm \z/xi);
     }
@@ -209,13 +215,13 @@ sub module_exists {
 }
 
 #----------------------------------------------------------------------------+
-# error( \%controller, $mesg )
+# error(\%controller, $mesg)
 #
-# Quietly - output errors/exceptions to log.
+# Quietly, output errors/exceptions to error_log
 
 sub error {
-    my ( $self, $mesg ) = @_;
-    $self->request->log_error($mesg);
+    my ($c, $mesg) = @_;
+    $c->request->log_error($mesg);
 }
 
 1;
@@ -275,12 +281,15 @@ Example:
   # construct as an object (optional)
   sub _new {
       my $class = shift;
-      return bless( {}, $class );
+      return bless({
+          attr1 => 'biz',
+          attr2 => 'baz',
+      }, $class);
   }
 
   # this method is executed for every request (optional)
   sub _global {
-      my ( $self, $c ) = @_;
+      my ($self, $c) = @_;
 
       $c->stash('baz','qux');
 
@@ -289,14 +298,14 @@ Example:
 
   # if the target method doesn't exist, this will be executed
   sub _default {
-      my ( $self, $c ) = @_;
+      my ($self, $c) = @_;
 
-      $self->_print_result( $c, 'bar' );
+      $self->_print_result($c, 'bar');
   }
 
   # _ always denotes a private method (not URI accessible)
   sub _print_result {
-      my ( $self, $c, $output ) = @_;
+      my ($self, $c, $output) = @_;
 
       $c->request->content_type('text/html');
 
@@ -306,7 +315,7 @@ Example:
 
   # /app/project/foo/bar --> maps to Project::Foo->bar()
   sub bar {
-      my ( $self, $c ) = @_;
+      my ($self, $c) = @_;
 
       $self->_print_result( $c, $c->stash('baz') );     # output 'qux'
   }
@@ -403,9 +412,7 @@ and C<_error()> methods that can be inherited using:
 
 Example:
 
-  use base qw(
-      Project::Base
-    );
+  use base 'Project::Base';
 
 C) Basic class.
 
@@ -425,6 +432,7 @@ Example:
   # Modules added here will be URI accessible 
   __DATA__ 
   Project::Foo
+  Project::Foo::Bar
 
 E) Password file used for restricting access to a specified path (see C<httpd.conf>).
 
@@ -478,7 +486,7 @@ L) Temporary shared space for file processing.
 
 =head1 CAVEATS
 
-Since your classes get compiled at Apache start-up, the server must be restarted
+Since your classes get compiled at Apache start-up the server must be restarted
 when any code changes take place.  You can do this easily using the C<webapp-kickstart>
 script provided with this package.
 
