@@ -1,15 +1,10 @@
 Revision history for Perl module Apache2::WebApp::Toolkit
 
-0.38
-    - Migrated project SCM and code repository to Google Project hosting.
-    - Updated POD and README artistic license URL in COPYRIGHT clause.
-    - Changed each module version so that I can verify that the PAUSE packager/uploader script works as expected.
-    - Updated license field in META.yml to fix 'License Unknown' issue on CPAN
-    - Updated PREREQ_PM module versions in Makefile.PL
-    - Updated module versions in META.yml requires field.
-
 0.39
     - Updated optional $class (in WebApp.pm) to return a blessed OBJECT by default.
     - Added missing packages to 001_load.t test script.
     - Minor POD updates and additions.
     - Spring cleaning.
+
+0.391
+	- End of Life

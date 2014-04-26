@@ -74,7 +74,7 @@ sub process {
 
         print "Stopping Apache:   \t\t\t\t\t   [ \033[32m OK \033[0m ]\n";
 
-        kill("TERM", $pid)
+        kill('TERM', $pid)
           or print "Found httpd.pid but the Apache process does not exist.\n";
 
         unlink("$doc_root/tmp/httpd.pid")
@@ -91,7 +91,7 @@ sub process {
 
         system(qq{ $bin -f $conf -c "Include $doc_root/conf/httpd.conf" $dflags })
           == 0
-          or $self->error("Unable to start Apache process");
+          or $self->error('Unable to start Apache process');
     }
 
     exit 0;

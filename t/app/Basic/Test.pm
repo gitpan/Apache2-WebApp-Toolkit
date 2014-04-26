@@ -33,7 +33,7 @@ sub _stash {
 sub _success {
     my ($self, $c) = @_;
     $c->request->content_type('text/html');
-    print "success";
+    print 'success';
     exit;
 }
 

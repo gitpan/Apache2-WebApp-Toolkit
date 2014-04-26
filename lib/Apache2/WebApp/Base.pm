@@ -64,7 +64,7 @@ sub error {
       );
 
     my $class = ref $self || $self;
-    $mesg ||= "Failed to initialize object";
+    $mesg ||= 'Failed to initialize object';
     my $error = "[$class] $mesg";
 
     if ( $self->{DEBUG} ) { confess $error } else { die $error }
@@ -78,7 +78,7 @@ sub error {
 # Return a reference of $self to the caller.
 
 sub _init {
-    my ( $self, $params ) = @_;
+    my ($self, $params) = @_;
     return $self;
 }
 
